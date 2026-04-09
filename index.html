@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jorge Castillo | Portfolio</title>
+    <meta name="description"
+        content="Portfolio personal de Jorge Castillo, desarrollador de software con enfoque en backend, automatización, APIs e interfaces web modernas." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body>
+    <div class="bg-layer"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-noise"></div>
+    <div class="bg-line"></div>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <header class="site-header">
+        <div class="container header-inner">
+            <nav class="nav" id="siteNav">
+                <a href="#proyectos">Proyectos</a>
+                <a href="#experiencia">Experiencia</a>
+                <a href="#skills">Skills</a>
+                <a href="#certificados">Certificados</a>
+                <a href="#contacto">Contacto</a>
+            </nav>
+
+            <a class="btn btn-primary" id="headerCta" href="#contacto">Hablemos</a>
+        </div>
+    </header>
+
+    <main id="inicio">
+        <section class="hero" id="hero">
+            <div class="container hero-grid">
+                <div>
+                    <h1 class="hero-title hero-title-name reveal delay-1">
+                        Jorge
+                        <span class="gradient">Castillo</span>
+                    </h1>
+
+                    <h1 class="hero-title hero-title-legacy reveal delay-1" aria-hidden="true">
+                        Construyo software
+                        <span class="gradient">con presencia y lógica</span>
+                    </h1>
+
+                    <p class="hero-text reveal delay-2">
+                        Desarrollador de software con enfoque en backend, automatizacion y despliegue. Trabajo con
+                        Java, Spring Boot, Python, Django y SQL para construir APIs, herramientas utiles e
+                        integraciones reales. Tambien manejo n8n, Docker, Portainer, Coolify y VPS para llevar
+                        proyectos desde la idea hasta produccion.
+                    </p>
+
+                    <div class="btn-row btn-row-spaced reveal delay-3">
+                        <a class="btn btn-primary" href="#proyectos">Ver proyectos →</a>
+                        <a class="btn btn-secondary" href="#contacto">Contactar</a>
+                    </div>
+
+                    <div class="stats reveal delay-4">
+                        <div class="stat">
+                            <strong>Backend</strong>
+                            <span>Java, Spring Boot, Python y Django</span>
+                        </div>
+                        <div class="stat">
+                            <strong>Automatizacion</strong>
+                            <span>n8n, APIs, integraciones y flujos utiles</span>
+                        </div>
+                        <div class="stat">
+                            <strong>Deploy</strong>
+                            <span>Docker, Portainer, Coolify y VPS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-card-wrap reveal delay-2">
+                    <div class="hero-card hero-photo-card" id="tiltCard">
+                        <div class="photo-shell">
+                            <img class="profile-photo" src="assets/img/selfie.jpg" alt="Foto de Jorge Castillo"
+                                fetchpriority="high" />
+                        </div>
+                        <div class="window">
+                            <div class="window-top">
+                                <div class="window-dots">
+                                    <span></span><span></span><span></span>
+                                </div>
+                                <div class="window-url">jorgecastillo.dev</div>
+                            </div>
+
+                            <div class="window-body">
+                                <div class="profile-panel">
+                                    <div class="profile-row">
+                                        <div>
+                                            <p>Perfil principal</p>
+                                            <h3>Software Developer</h3>
+                                        </div>
+                                        <div class="avatar">JC</div>
+                                    </div>
+                                </div>
+
+                                <div class="mini-grid">
+                                    <div class="mini-card">
+                                        <p>Especialidad</p>
+                                        <strong>APIs, backend y diseño web moderno</strong>
+                                    </div>
+                                    <div class="mini-card">
+                                        <p>Enfoque</p>
+                                        <strong>Soluciones útiles, limpias y con nivel visual</strong>
+                                    </div>
+                                </div>
+
+                                <div class="stack-box">
+                                    <p>Stack destacado</p>
+                                    <div class="chip-list">
+                                        <span class="chip">Java</span>
+                                        <span class="chip">Spring Boot</span>
+                                        <span class="chip">Python</span>
+                                        <span class="chip">Django</span>
+                                        <span class="chip">PostgreSQL</span>
+                                        <span class="chip">Hibernate</span>
+                                        <span class="chip">REST APIs</span>
+                                        <span class="chip">Git</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features">
+            <div class="container features-grid">
+                <article class="feature-card reveal">
+                    <div class="icon">01</div>
+                    <h3>Backend que resuelve</h3>
+                    <p>Construyo APIs, logica de negocio y acceso a datos con una base limpia para que el producto sea
+                        mantenible y pueda crecer.</p>
+                </article>
+
+                <article class="feature-card reveal delay-1">
+                    <div class="icon">02</div>
+                    <h3>Automatizacion util</h3>
+                    <p>Creo flujos con n8n y APIs para conectar herramientas, reducir trabajo manual y acelerar tareas
+                        repetitivas.</p>
+                </article>
+
+                <article class="feature-card reveal delay-2">
+                    <div class="icon">03</div>
+                    <h3>Deploy con criterio</h3>
+                    <p>Puedo preparar entornos con Docker, Portainer, Coolify y VPS para publicar proyectos y dejarlos
+                        funcionando con orden.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="proyectos">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <div class="eyebrow">Proyectos</div>
+                        <h2 class="section-title">Lo que puedo aportar</h2>
+                    </div>
+                    <p class="section-copy">Soluciones pensadas para empresa: backend, automatizacion y despliegue con
+                        foco en utilidad real.</p>
+                </div>
+
+                <div class="projects-grid">
+                    <article class="project-card reveal">
+                        <div class="project-cover"></div>
+                        <div class="project-body">
+                            <div class="project-top">
+                                <span class="label">Backend · Producto</span>
+                                <span class="project-link">-></span>
+                            </div>
+                            <h3>Backends y APIs para producto</h3>
+                            <p>Desarrollo servicios con Java y Spring Boot o con Django para exponer APIs claras,
+                                conectar datos y soportar procesos reales de negocio.</p>
+                            <div class="tag-row">
+                                <span class="tag">Spring Boot</span>
+                                <span class="tag">Django</span>
+                                <span class="tag">REST APIs</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="project-card reveal delay-1">
+                        <div class="project-cover"></div>
+                        <div class="project-body">
+                            <div class="project-top">
+                                <span class="label">Automatizacion · Integracion</span>
+                                <span class="project-link">-></span>
+                            </div>
+                            <h3>Automatizaciones con n8n</h3>
+                            <p>Diseño flujos para conectar APIs, formularios, bases de datos y tareas internas con el
+                                objetivo de ahorrar tiempo y reducir pasos manuales.</p>
+                            <div class="tag-row">
+                                <span class="tag">n8n</span>
+                                <span class="tag">APIs</span>
+                                <span class="tag">Integraciones</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="project-card reveal delay-2">
+                        <div class="project-cover"></div>
+                        <div class="project-body">
+                            <div class="project-top">
+                                <span class="label">Deploy · Infra</span>
+                                <span class="project-link">-></span>
+                            </div>
+                            <h3>Deploy en VPS con Docker</h3>
+                            <p>Preparo entornos con Docker y gestiono servicios con Portainer o Coolify para publicar
+                                proyectos con mas control, rapidez y autonomia.</p>
+                            <div class="tag-row">
+                                <span class="tag">Docker</span>
+                                <span class="tag">Portainer</span>
+                                <span class="tag">Coolify</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <div class="container">
+                <div class="skills-box reveal">
+                    <div class="section-head section-head-flat layer-front">
+                        <div>
+                            <div class="eyebrow">Skills</div>
+                            <h2 class="section-title">Stack con el que trabajo</h2>
+                        </div>
+                        <p class="section-copy">Tecnologias orientadas a desarrollo backend, automatizacion de procesos
+                            y
+                            despliegue de proyectos reales.</p>
+                    </div>
+
+                    <div class="skills-cloud layer-front">
+                        <span class="skill-pill">Java</span>
+                        <span class="skill-pill">Spring Boot</span>
+                        <span class="skill-pill">JPA / Hibernate</span>
+                        <span class="skill-pill">Python</span>
+                        <span class="skill-pill">Django</span>
+                        <span class="skill-pill">REST APIs</span>
+                        <span class="skill-pill">n8n</span>
+                        <span class="skill-pill">PostgreSQL</span>
+                        <span class="skill-pill">MySQL</span>
+                        <span class="skill-pill">SQLite</span>
+                        <span class="skill-pill">Docker</span>
+                        <span class="skill-pill">Portainer</span>
+                        <span class="skill-pill">Coolify</span>
+                        <span class="skill-pill">VPS</span>
+                        <span class="skill-pill">Git</span>
+                        <span class="skill-pill">GitHub</span>
+                        <span class="skill-pill">Linux</span>
+                        <span class="skill-pill">HTML</span>
+                        <span class="skill-pill">CSS</span>
+                        <span class="skill-pill">JavaScript</span>
+                        <span class="skill-pill">Testing</span>
+                        <span class="skill-pill">Maven / Gradle</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experiencia">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <div class="eyebrow">Experiencia</div>
+                        <h2 class="section-title">Experiencia profesional</h2>
+                    </div>
+                    <p class="section-copy">Mi recorrido mezcla desarrollo, operaciones y soporte. Eso me ayuda a
+                        entender mejor el producto, la entrega y el contexto real del negocio.</p>
+                </div>
+
+                <div class="timeline-grid">
+                    <article class="timeline-item timeline-item-featured reveal">
+                        <span class="timeline-year">Noviembre 2025 - Hoy</span>
+                        <h3>Programador Junior Python</h3>
+                        <div class="timeline-place">Halltic Tech S.L. · Madrid · Hibrido</div>
+                        <div class="timeline-meta">
+                            <span class="timeline-pill">Contrato de practicas</span>
+                            <span class="timeline-pill">Programador</span>
+                        </div>
+                        <ul>
+                            <li>Desarrollo y apoyo tecnico en soluciones basadas en Python para necesidades reales de
+                                empresa.</li>
+                            <li>Trabajo con Git, JSON y tareas de programacion orientadas a necesidades reales de
+                                empresa.</li>
+                            <li>Experiencia en entorno hibrido, aprendizaje rapido y colaboracion profesional con
+                                equipo y cliente.</li>
+                        </ul>
+                    </article>
+
+                    <article class="timeline-item reveal delay-1">
+                        <span class="timeline-year">2025</span>
+                        <h3>Desarrollador de Software Full Stack</h3>
+                        <div class="timeline-place">UTAI SOFTWARE</div>
+                        <span class="timeline-pill">Programador full stack</span>
+                        <ul>
+                            <li>Creacion de interfaces web con HTML, CSS, JavaScript y Bootstrap.</li>
+                            <li>Desarrollo de APIs REST con Java y Spring Boot.</li>
+                            <li>Gestion de base de datos con JPA/Hibernate y PostgreSQL.</li>
+                            <li>Desarrollo de APIs REST con Django y Django REST Framework.</li>
+                            <li>Integracion de funcionalidades de IA mediante la API de OpenAI.</li>
+                        </ul>
+                    </article>
+
+                    <article class="timeline-item reveal delay-2">
+                        <span class="timeline-year">2023</span>
+                        <h3>Tecnico Operaciones N1</h3>
+                        <div class="timeline-place">WESTCON COMSTOR</div>
+                        <ul>
+                            <li>Resolucion de alertas y tickets.</li>
+                            <li>Contacto con herramientas y entornos de seguridad como Fortigate y Palo Alto.</li>
+                            <li>Experiencia practica en soporte, seguimiento y respuesta operativa.</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="sobre-mi">
+            <div class="container about-grid">
+                <div class="about-main reveal">
+                    <div class="eyebrow">Sobre mi</div>
+                    <h2 class="section-title">Perfil tecnico con mentalidad de solucion</h2>
+                    <p>
+                        Soy desarrollador con base en software, sistemas y redes. Me adapto rapido, aprendo nuevas
+                        herramientas con facilidad y disfruto construyendo soluciones que funcionen bien tanto en
+                        desarrollo como en produccion.
+                    </p>
+                </div>
+
+                <div class="about-side">
+                    <article class="about-card reveal delay-1">
+                        <h3>Mentalidad</h3>
+                        <p>Aprender rapido, aportar valor pronto y seguir mejorando con cada proyecto.</p>
+                    </article>
+
+                    <article class="about-card reveal delay-2">
+                        <h3>Fortaleza</h3>
+                        <p>Combino backend, automatizacion y despliegue para entregar soluciones mas completas.</p>
+                    </article>
+
+                    <article class="about-card reveal delay-3">
+                        <h3>Forma de trabajar</h3>
+                        <p>Me gusta trabajar con orden, comunicar claro y dejar una base limpia para que el proyecto
+                            pueda crecer.</p>
+                    </article>
+
+                    <article class="about-card reveal delay-4">
+                        <h3>Objetivo</h3>
+                        <p>Incorporarme a un equipo donde pueda crecer, aportar desde el primer dia y seguir ganando
+                            experiencia como developer.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="formacion">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <div class="eyebrow">Formacion</div>
+                        <h2 class="section-title">Base tecnica</h2>
+                    </div>
+                    <p class="section-copy">Una base tecnica que une desarrollo, sistemas y redes, algo muy util para
+                        entender el producto completo.</p>
+                </div>
+
+                <div class="education-grid">
+                    <article class="education-card reveal">
+                        <div class="small-label">2023 - 2025</div>
+                        <h3>F.P. Grado Superior en Desarrollo de Aplicaciones Multiplataforma</h3>
+                        <span class="education-meta">IES Pío Baroja</span>
+                        <p>Profundización en backend, bases de datos, interfaces gráficas, programación orientada a
+                            objetos y desarrollo de software multiplataforma.</p>
+                    </article>
+
+                    <article class="education-card reveal delay-1">
+                        <div class="small-label">2021 - 2023</div>
+                        <h3>F.P. Grado Medio en Sistemas Microinformáticos y Redes</h3>
+                        <span class="education-meta">CFPE Fundación Tomillo</span>
+                        <p>Base técnica en sistemas, mantenimiento, redes, servidores, hardware y administración de
+                            entornos informáticos.</p>
+                    </article>
+
+                    <article class="education-card reveal delay-2">
+                        <div class="small-label">2019 - 2021</div>
+                        <h3>F.P. Básica en Informática y Comunicaciones</h3>
+                        <span class="education-meta">CFPE Fundación Tomillo</span>
+                        <p>Primeros cimientos sólidos en informática, soporte, entorno de oficina y conocimientos
+                            técnicos esenciales.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="certificados">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <div class="eyebrow">Certificados</div>
+                        <h2 class="section-title">Ventana para certificaciones</h2>
+                    </div>
+                    <p class="section-copy">He dejado esta seccion preparada para mostrar certificados, diplomas o
+                        acreditaciones tecnicas de forma clara y visual.</p>
+                </div>
+
+                <div class="window certificates-window reveal">
+                    <div class="window-top">
+                        <div class="window-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="window-url">certificados.dev</div>
+                    </div>
+
+                    <div class="window-body certificate-grid">
+                        <article class="certificate-card">
+                            <div class="certificate-status">Espacio destacado</div>
+                            <h3>Certificado principal</h3>
+                            <p>Añade aqui tu certificacion mas potente con nombre del curso, entidad emisora y fecha.
+                            </p>
+                        </article>
+
+                        <article class="certificate-card">
+                            <div class="certificate-status">Tecnico</div>
+                            <h3>Segundo certificado</h3>
+                            <p>Ideal para cursos de backend, Docker, despliegue, cloud, automatizacion o herramientas
+                                de desarrollo.</p>
+                        </article>
+
+                        <article class="certificate-card">
+                            <div class="certificate-status">Complementario</div>
+                            <h3>Tercer certificado</h3>
+                            <p>Tambien puedes usar esta tarjeta para diplomas, cursos internos, practicas o formacion
+                                adicional relevante.</p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto">
+            <div class="container contact-grid">
+                <div class="contact-card reveal">
+                    <div class="eyebrow">Contacto</div>
+                    <h2 class="section-title">Busco mi siguiente oportunidad</h2>
+                    <p class="contact-copy">
+                        Si buscas un perfil junior con buena base tecnica, capacidad de adaptacion y ganas reales de
+                        aportar en backend, automatizacion o despliegue, estare encantado de hablar contigo.
+                    </p>
+
+                    <div class="contact-details">
+                        <a class="contact-pill"
+                            href="mailto:jorge.a.castilloreyes@gmail.com">jorge.a.castilloreyes@gmail.com</a>
+                        <a class="contact-pill" href="tel:+34645321979">+34 645 321 979</a>
+                    </div>
+
+                    <div class="btn-row btn-row-spaced layer-front">
+                        <a class="btn btn-primary" href="mailto:jorge.a.castilloreyes@gmail.com">Escribirme</a>
+                        <a class="btn btn-secondary" href="#proyectos">Ver trabajo</a>
+                    </div>
+
+                    <div class="socials">
+                        <a class="social" href="#" aria-label="GitHub">GH</a>
+                        <a class="social" href="#" aria-label="LinkedIn">in</a>
+                        <a class="social" href="#" aria-label="Correo">@</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-inner">
+            <p>© 2026 Jorge Castillo. Portfolio personal.</p>
+            <p>Backend, automatizacion, despliegue y ganas de seguir creciendo.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/content.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+</body>
+
+</html>
