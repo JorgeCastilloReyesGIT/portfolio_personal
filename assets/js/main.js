@@ -335,26 +335,49 @@ const initCertificateCarousel = () => {
     }
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const autoScrollSpeed = 18;
-    let direction = 1;
+    const autoScrollSpeed = 16;
+    let originalCards = [];
+    let loopEnabled = false;
     let frame = 0;
     let lastFrameTime = 0;
+    let lastAutoScrollAt = 0;
     let resumeTimer = 0;
-    let autoScrolling = false;
 
-    const hasOverflow = () => carousel.scrollWidth - carousel.clientWidth > 12;
+    const clearResumeTimer = () => {
+        if (resumeTimer) {
+            window.clearTimeout(resumeTimer);
+            resumeTimer = 0;
+        }
+    };
 
-    const syncDirectionWithPosition = () => {
-        const maxScrollLeft = Math.max(carousel.scrollWidth - carousel.clientWidth, 0);
+    const removeClones = () => {
+        carousel.querySelectorAll('[data-carousel-clone="true"]').forEach((clone) => clone.remove());
+        carousel.classList.remove('is-carousel-loop');
+    };
 
-        if (carousel.scrollLeft <= 1) {
-            direction = 1;
-            return;
+    const getLoopPoint = () => {
+        const firstOriginalCard = originalCards[0];
+        const firstClone = carousel.querySelector('[data-carousel-clone="true"]');
+
+        if (!loopEnabled || !firstOriginalCard || !firstClone) {
+            return 0;
         }
 
-        if (carousel.scrollLeft >= maxScrollLeft - 1) {
-            direction = -1;
+        return Math.max(firstClone.offsetLeft - firstOriginalCard.offsetLeft, 0);
+    };
+
+    const normalizeScrollPosition = () => {
+        const loopPoint = getLoopPoint();
+
+        if (!loopPoint) {
+            return 0;
         }
+
+        while (carousel.scrollLeft >= loopPoint) {
+            carousel.scrollLeft -= loopPoint;
+        }
+
+        return loopPoint;
     };
 
     const stopAutoScroll = () => {
@@ -366,54 +389,74 @@ const initCertificateCarousel = () => {
         lastFrameTime = 0;
     };
 
-    const tick = (timestamp) => {
-        if (!hasOverflow()) {
-            carousel.classList.remove('is-carousel-active');
-            stopAutoScroll();
+    const buildLoopTrack = () => {
+        stopAutoScroll();
+        clearResumeTimer();
+        removeClones();
+        carousel.scrollLeft = 0;
+        originalCards = Array.from(carousel.children);
+
+        if (!originalCards.length) {
+            loopEnabled = false;
             return;
         }
 
-        carousel.classList.add('is-carousel-active');
+        loopEnabled = carousel.scrollWidth - carousel.clientWidth > 12;
+
+        if (!loopEnabled) {
+            return;
+        }
+
+        originalCards.forEach((card) => {
+            const clone = card.cloneNode(true);
+            clone.dataset.carouselClone = 'true';
+            clone.classList.add('certificate-card-clone');
+            carousel.appendChild(clone);
+        });
+
+        carousel.classList.add('is-carousel-loop');
+    };
+
+    const tick = (timestamp) => {
+        const loopPoint = normalizeScrollPosition();
+
+        if (!loopEnabled || !loopPoint) {
+            stopAutoScroll();
+            return;
+        }
 
         if (!lastFrameTime) {
             lastFrameTime = timestamp;
         }
 
         const deltaSeconds = Math.min((timestamp - lastFrameTime) / 1000, 0.05);
-        const maxScrollLeft = Math.max(carousel.scrollWidth - carousel.clientWidth, 0);
-        let nextScrollLeft = carousel.scrollLeft + (direction * autoScrollSpeed * deltaSeconds);
+        const travelDistance = autoScrollSpeed * deltaSeconds;
 
-        if (nextScrollLeft <= 0) {
-            nextScrollLeft = 0;
-            direction = 1;
-        } else if (nextScrollLeft >= maxScrollLeft) {
-            nextScrollLeft = maxScrollLeft;
-            direction = -1;
+        lastAutoScrollAt = window.performance.now();
+        carousel.scrollLeft += travelDistance;
+
+        if (carousel.scrollLeft >= loopPoint) {
+            carousel.scrollLeft -= loopPoint;
         }
-
-        autoScrolling = true;
-        carousel.scrollLeft = nextScrollLeft;
-        autoScrolling = false;
 
         lastFrameTime = timestamp;
         frame = requestAnimationFrame(tick);
     };
 
     const startAutoScroll = () => {
-        if (reduceMotion || frame || !hasOverflow()) {
+        if (reduceMotion || frame || !loopEnabled) {
             return;
         }
 
-        syncDirectionWithPosition();
-        carousel.classList.add('is-carousel-active');
+        normalizeScrollPosition();
         lastFrameTime = 0;
         frame = requestAnimationFrame(tick);
     };
 
     const scheduleAutoScrollResume = (delay = 1800) => {
-        clearTimeout(resumeTimer);
+        clearResumeTimer();
 
-        if (reduceMotion || !hasOverflow()) {
+        if (reduceMotion || !loopEnabled) {
             return;
         }
 
@@ -423,7 +466,7 @@ const initCertificateCarousel = () => {
     };
 
     carousel.addEventListener('pointerenter', () => {
-        clearTimeout(resumeTimer);
+        clearResumeTimer();
         stopAutoScroll();
     });
 
@@ -432,7 +475,7 @@ const initCertificateCarousel = () => {
     });
 
     carousel.addEventListener('focusin', () => {
-        clearTimeout(resumeTimer);
+        clearResumeTimer();
         stopAutoScroll();
     });
 
@@ -441,7 +484,7 @@ const initCertificateCarousel = () => {
     });
 
     carousel.addEventListener('touchstart', () => {
-        clearTimeout(resumeTimer);
+        clearResumeTimer();
         stopAutoScroll();
     }, { passive: true });
 
@@ -450,28 +493,20 @@ const initCertificateCarousel = () => {
     }, { passive: true });
 
     carousel.addEventListener('scroll', () => {
-        syncDirectionWithPosition();
-
-        if (!autoScrolling) {
-            stopAutoScroll();
-            scheduleAutoScrollResume();
-        }
-    }, { passive: true });
-
-    window.addEventListener('resize', () => {
-        clearTimeout(resumeTimer);
-        syncDirectionWithPosition();
-
-        if (hasOverflow()) {
-            scheduleAutoScrollResume(150);
+        if (window.performance.now() - lastAutoScrollAt <= 80) {
             return;
         }
 
-        carousel.classList.remove('is-carousel-active');
-        carousel.scrollLeft = 0;
         stopAutoScroll();
+        scheduleAutoScrollResume();
     }, { passive: true });
 
+    window.addEventListener('resize', () => {
+        buildLoopTrack();
+        scheduleAutoScrollResume(150);
+    }, { passive: true });
+
+    buildLoopTrack();
     startAutoScroll();
 };
 
