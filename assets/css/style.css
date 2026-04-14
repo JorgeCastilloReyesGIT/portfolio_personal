@@ -956,10 +956,6 @@ section {
     background: rgba(255, 255, 255, 0.28);
 }
 
-.certificate-grid.is-carousel-loop {
-    scroll-behavior: auto;
-}
-
 .certificate-card {
     flex: 0 0 clamp(280px, 32vw, 360px);
     min-width: 0;
