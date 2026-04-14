@@ -121,11 +121,28 @@ const renderEducation = (items) => items.map((item, index) => `
     </article>
 `).join('');
 
+const renderCertificateMedia = (item) => {
+    if (!item.image || !item.image.src) {
+        return '';
+    }
+
+    const alt = item.image.alt || `Vista previa de ${item.title}`;
+
+    return `
+        <div class="certificate-media">
+            <img src="${escapeHtml(item.image.src)}" alt="${escapeHtml(alt)}" loading="lazy" />
+        </div>
+    `;
+};
+
 const renderCertificates = (items) => items.map((item, index) => `
-    <article class="certificate-card ${delayClass(index)}">
-        <div class="certificate-status">${escapeHtml(item.status)}</div>
-        <h3>${escapeHtml(item.title)}</h3>
-        <p>${escapeHtml(item.text)}</p>
+    <article class="certificate-card ${item.image && item.image.src ? 'certificate-card-has-image ' : ''}${delayClass(index)}">
+        ${renderCertificateMedia(item)}
+        <div class="certificate-copy">
+            <div class="certificate-status">${escapeHtml(item.status)}</div>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.text)}</p>
+        </div>
     </article>
 `).join('');
 
