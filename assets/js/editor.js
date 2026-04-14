@@ -2,7 +2,7 @@ const STORAGE_KEY = window.portfolioStorageKey || 'portfolioContentOverride';
 const defaultContent = JSON.parse(JSON.stringify(window.defaultPortfolioContent || {}));
 let state = JSON.parse(JSON.stringify(window.portfolioContent || defaultContent));
 const CERTIFICATE_STATIC_PATH = 'static/certificates';
-let certificateDirectoryHandle = null;
+const CERTIFICATE_UPLOAD_ENDPOINT = '/api/upload/certificate';
 
 const sectionConfig = [
     { key: 'navigation', label: 'Menu', description: 'Enlaces que aparecen en la barra superior.' },
@@ -121,23 +121,7 @@ const isCertificateImagePath = (path) => path[0] === 'certificates'
     && path[3] === 'image'
     && path[4] === 'src';
 
-const normalizeImageFileName = (fileName) => {
-    const rawName = String(fileName || 'certificado.png').trim();
-    const segments = rawName.split('.');
-    const extension = segments.length > 1 ? `.${segments.pop().toLowerCase()}` : '';
-    const baseName = segments.join('.') || 'certificado';
-    const safeBaseName = baseName
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/[^a-zA-Z0-9._-]/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^[-.]+|[-.]+$/g, '') || 'certificado';
-
-    return `${safeBaseName}${extension || '.png'}`;
-};
-
-const getCertificateImageHint = () => `Al cargar un certificado, el editor intentara guardarlo en <code>${CERTIFICATE_STATIC_PATH}/</code> con el nombre del archivo. La primera vez te pedira elegir la carpeta <code>portfolio</code>, <code>static</code> o <code>certificates</code>.`;
+const getCertificateImageHint = () => `Al cargar un certificado, el editor intentara guardarlo automaticamente en <code>${CERTIFICATE_STATIC_PATH}/</code> usando <code>${CERTIFICATE_UPLOAD_ENDPOINT}</code>.`;
 
 const setValueByPath = (source, path, value) => {
     let current = source;
@@ -784,42 +768,41 @@ const readFileAsDataUrl = (file) => new Promise((resolve, reject) => {
     reader.readAsDataURL(file);
 });
 
-const getCertificateDirectoryHandle = async () => {
-    if (certificateDirectoryHandle) {
-        return certificateDirectoryHandle;
+const uploadCertificateImage = async (file) => {
+    if (window.location.protocol === 'file:') {
+        throw new Error('Abre el editor desde tu servidor web para poder guardar certificados.');
     }
 
-    if (typeof window.showDirectoryPicker !== 'function') {
-        throw new Error('directory-picker-not-supported');
+    const dataUrl = await readFileAsDataUrl(file);
+    let response = null;
+    let payload = null;
+
+    try {
+        response = await fetch(CERTIFICATE_UPLOAD_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                fileName: file.name,
+                dataUrl
+            })
+        });
+    } catch (error) {
+        throw new Error('No se pudo conectar con el servicio de subida.');
     }
 
-    const baseHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
-
-    if (baseHandle.name === 'certificates') {
-        certificateDirectoryHandle = baseHandle;
-        return certificateDirectoryHandle;
+    try {
+        payload = await response.json();
+    } catch (error) {
+        payload = null;
     }
 
-    if (baseHandle.name === 'static') {
-        certificateDirectoryHandle = await baseHandle.getDirectoryHandle('certificates', { create: true });
-        return certificateDirectoryHandle;
+    if (!response.ok || !payload || !payload.path) {
+        throw new Error(payload && payload.error ? payload.error : 'No se pudo guardar la imagen del certificado.');
     }
 
-    const staticHandle = await baseHandle.getDirectoryHandle('static', { create: true });
-    certificateDirectoryHandle = await staticHandle.getDirectoryHandle('certificates', { create: true });
-    return certificateDirectoryHandle;
-};
-
-const saveCertificateImageToStatic = async (file) => {
-    const directoryHandle = await getCertificateDirectoryHandle();
-    const fileName = normalizeImageFileName(file.name);
-    const fileHandle = await directoryHandle.getFileHandle(fileName, { create: true });
-    const writable = await fileHandle.createWritable();
-
-    await writable.write(file);
-    await writable.close();
-
-    return `${CERTIFICATE_STATIC_PATH}/${fileName}`;
+    return payload.path;
 };
 
 panelsNode.addEventListener('input', (event) => {
@@ -870,7 +853,7 @@ panelsNode.addEventListener('change', async (event) => {
 
         try {
             if (isCertificateImagePath(path)) {
-                const relativePath = await saveCertificateImageToStatic(file);
+                const relativePath = await uploadCertificateImage(file);
                 setValueByPath(state, path, relativePath);
                 renderAll();
                 setStatus(`Imagen guardada en ${relativePath}`, 'success');
@@ -882,16 +865,16 @@ panelsNode.addEventListener('change', async (event) => {
             renderAll();
             setStatus(`Imagen cargada: ${file.name}`, 'success');
         } catch (error) {
+            if (isCertificateImagePath(path)) {
+                setStatus(error.message || 'No se pudo guardar la imagen del certificado.', 'error');
+                return;
+            }
+
             try {
                 const dataUrl = await readFileAsDataUrl(file);
                 setValueByPath(state, path, dataUrl);
                 renderAll();
-
-                if (isCertificateImagePath(path)) {
-                    setStatus('No se pudo guardar en static/certificates. La imagen se ha cargado temporalmente en base64.', 'error');
-                } else {
-                    setStatus(`Imagen cargada: ${file.name}`, 'success');
-                }
+                setStatus(`Imagen cargada: ${file.name}`, 'success');
             } catch (readError) {
                 setStatus('No se pudo cargar la imagen seleccionada.', 'error');
             }
