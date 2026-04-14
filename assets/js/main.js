@@ -135,16 +135,23 @@ const renderCertificateMedia = (item) => {
     `;
 };
 
-const renderCertificates = (items) => items.map((item, index) => `
-    <article class="certificate-card ${item.image && item.image.src ? 'certificate-card-has-image ' : ''}${delayClass(index)}">
+const renderCertificates = (items) => items.map((item, index) => {
+    const isClickable = Boolean(item.image && item.image.src);
+    const alt = item.image && item.image.alt ? item.image.alt : item.title;
+
+    return `
+    <article class="certificate-card ${isClickable ? 'certificate-card-clickable ' : ''}${delayClass(index)}"
+        ${isClickable ? `data-certificate-src="${escapeHtml(item.image.src)}" data-certificate-alt="${escapeHtml(alt)}" data-certificate-title="${escapeHtml(item.title)}" data-certificate-status="${escapeHtml(item.status)}" data-certificate-text="${escapeHtml(item.text)}" tabindex="0" role="button" aria-label="Abrir ${escapeHtml(item.title)}"` : ''}>
         ${renderCertificateMedia(item)}
         <div class="certificate-copy">
             <div class="certificate-status">${escapeHtml(item.status)}</div>
             <h3>${escapeHtml(item.title)}</h3>
             <p>${escapeHtml(item.text)}</p>
+            ${isClickable ? '<span class="certificate-hint">Pulsa para ampliar</span>' : ''}
         </div>
     </article>
-`).join('');
+`;
+}).join('');
 
 const renderDetails = (items) => items.map((item) => `
     <a class="contact-pill" href="${escapeHtml(item.href)}"${getLinkAttributes(item.href)}>${escapeHtml(item.text)}</a>
@@ -266,8 +273,88 @@ const applySectionOrder = (order) => {
     });
 };
 
+const createCertificateModal = () => {
+    const modal = document.createElement('div');
+    modal.className = 'certificate-modal';
+    modal.id = 'certificateModal';
+    modal.setAttribute('aria-hidden', 'true');
+
+    modal.innerHTML = `
+        <div class="certificate-modal-backdrop" data-close-modal="true"></div>
+        <div class="certificate-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="certificateModalTitle">
+            <button class="certificate-modal-close" type="button" aria-label="Cerrar certificado" data-close-modal="true">×</button>
+            <div class="certificate-modal-meta">
+                <span class="certificate-modal-status" id="certificateModalStatus"></span>
+                <h3 class="certificate-modal-title" id="certificateModalTitle"></h3>
+                <p class="certificate-modal-text" id="certificateModalText"></p>
+            </div>
+            <div class="certificate-modal-media">
+                <img id="certificateModalImage" src="" alt="" />
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    return modal;
+};
+
+const certificateModal = createCertificateModal();
+const certificateModalImage = document.getElementById('certificateModalImage');
+const certificateModalStatus = document.getElementById('certificateModalStatus');
+const certificateModalTitle = document.getElementById('certificateModalTitle');
+const certificateModalText = document.getElementById('certificateModalText');
+
+const openCertificateModal = (card) => {
+    if (!card || !card.dataset.certificateSrc) {
+        return;
+    }
+
+    certificateModalImage.src = card.dataset.certificateSrc;
+    certificateModalImage.alt = card.dataset.certificateAlt || card.dataset.certificateTitle || 'Certificado';
+    certificateModalStatus.textContent = card.dataset.certificateStatus || '';
+    certificateModalTitle.textContent = card.dataset.certificateTitle || 'Certificado';
+    certificateModalText.textContent = card.dataset.certificateText || '';
+
+    certificateModal.classList.add('is-open');
+    certificateModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+};
+
+const closeCertificateModal = () => {
+    certificateModal.classList.remove('is-open');
+    certificateModal.setAttribute('aria-hidden', 'true');
+    certificateModalImage.src = '';
+    document.body.classList.remove('modal-open');
+};
+
 renderPortfolioContent();
 applySectionOrder(content.sectionOrder);
+
+document.addEventListener('click', (event) => {
+    const certificateCard = event.target.closest('.certificate-card-clickable');
+    if (certificateCard) {
+        openCertificateModal(certificateCard);
+        return;
+    }
+
+    if (event.target.closest('[data-close-modal="true"]')) {
+        closeCertificateModal();
+    }
+});
+
+document.addEventListener('keydown', (event) => {
+    const certificateCard = event.target.closest('.certificate-card-clickable');
+
+    if ((event.key === 'Enter' || event.key === ' ') && certificateCard) {
+        event.preventDefault();
+        openCertificateModal(certificateCard);
+        return;
+    }
+
+    if (event.key === 'Escape' && certificateModal.classList.contains('is-open')) {
+        closeCertificateModal();
+    }
+});
 
 const cursorGlow = document.getElementById('cursorGlow');
 const tiltCard = document.getElementById('tiltCard');
