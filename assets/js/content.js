@@ -231,16 +231,28 @@ window.defaultPortfolioContent = {
             {
                 status: 'Espacio destacado',
                 title: 'Certificado principal',
+                image: {
+                    src: '',
+                    alt: 'Vista previa del certificado principal'
+                },
                 text: 'Anade aqui tu certificacion mas potente con nombre del curso, entidad emisora y fecha.'
             },
             {
                 status: 'Tecnico',
                 title: 'Segundo certificado',
+                image: {
+                    src: '',
+                    alt: 'Vista previa del segundo certificado'
+                },
                 text: 'Ideal para cursos de backend, Docker, despliegue, cloud, automatizacion o herramientas de desarrollo.'
             },
             {
                 status: 'Complementario',
                 title: 'Tercer certificado',
+                image: {
+                    src: '',
+                    alt: 'Vista previa del tercer certificado'
+                },
                 text: 'Tambien puedes usar esta tarjeta para diplomas, cursos internos, practicas o formacion adicional relevante.'
             }
         ]

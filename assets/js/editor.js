@@ -1,6 +1,8 @@
 const STORAGE_KEY = window.portfolioStorageKey || 'portfolioContentOverride';
 const defaultContent = JSON.parse(JSON.stringify(window.defaultPortfolioContent || {}));
 let state = JSON.parse(JSON.stringify(window.portfolioContent || defaultContent));
+const CERTIFICATE_STATIC_PATH = 'static/certificates';
+let certificateDirectoryHandle = null;
 
 const sectionConfig = [
     { key: 'navigation', label: 'Menu', description: 'Enlaces que aparecen en la barra superior.' },
@@ -43,6 +45,7 @@ const fieldLabels = {
     variant: 'Estilo',
     title: 'Titulo',
     text: 'Texto',
+    image: 'Imagen',
     icon: 'Icono',
     items: 'Items',
     eyebrow: 'Etiqueta',
@@ -108,6 +111,33 @@ const getValueByPath = (source, path) => path.reduce((accumulator, key) => {
 
     return accumulator[key];
 }, source);
+
+const isImageFieldPath = (path, key) => key === 'src'
+    && ['photo', 'image'].includes(String(path[path.length - 2] || ''));
+
+const isCertificateImagePath = (path) => path[0] === 'certificates'
+    && path[1] === 'items'
+    && typeof path[2] === 'number'
+    && path[3] === 'image'
+    && path[4] === 'src';
+
+const normalizeImageFileName = (fileName) => {
+    const rawName = String(fileName || 'certificado.png').trim();
+    const segments = rawName.split('.');
+    const extension = segments.length > 1 ? `.${segments.pop().toLowerCase()}` : '';
+    const baseName = segments.join('.') || 'certificado';
+    const safeBaseName = baseName
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/[^a-zA-Z0-9._-]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^[-.]+|[-.]+$/g, '') || 'certificado';
+
+    return `${safeBaseName}${extension || '.png'}`;
+};
+
+const getCertificateImageHint = () => `Al cargar un certificado, el editor intentara guardarlo en <code>${CERTIFICATE_STATIC_PATH}/</code> con el nombre del archivo. La primera vez te pedira elegir la carpeta <code>portfolio</code>, <code>static</code> o <code>certificates</code>.`;
 
 const setValueByPath = (source, path, value) => {
     let current = source;
@@ -391,8 +421,7 @@ const buildPreview = (key, value) => {
         `;
     case 'projects':
     case 'experience':
-    case 'education':
-    case 'certificates': {
+    case 'education': {
         const list = safeArray(value.items).map((item) => {
             const title = item.title || item.role || item.status || item.period;
             const subtitle = item.description || item.text || item.company || item.place || '';
@@ -407,6 +436,24 @@ const buildPreview = (key, value) => {
 
         return `<div class="preview-list">${list}</div>`;
     }
+    case 'certificates':
+        return `
+            <div class="preview-list">
+                ${safeArray(value.items).map((item) => `
+                    <div class="preview-item preview-item-media">
+                        ${item.image && item.image.src ? `
+                            <div class="preview-image">
+                                <img src="${escapeHtml(item.image.src)}" alt="${escapeHtml(item.image.alt || item.title || 'Certificado')}" loading="lazy" />
+                            </div>
+                        ` : ''}
+                        <div>
+                            <strong>${escapeHtml(item.title || item.status || 'Certificado')}</strong>
+                            <span>${escapeHtml(item.text || '')}</span>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
     case 'skills':
         return `
             <div class="preview-tags">
@@ -454,6 +501,35 @@ const shouldUseTextarea = (key, value) => {
     return ['description', 'copy', 'text'].includes(key) || value.length > 80;
 };
 
+const renderImageField = (path, value, label) => {
+    const pathString = pathToString(path);
+    const hasImage = Boolean(String(value || '').trim());
+    const isCertificateImage = isCertificateImagePath(path);
+    const helperText = isCertificateImage
+        ? getCertificateImageHint()
+        : 'Puedes escribir una ruta como <code>assets/img/certificados/mi-certificado.png</code> o cargar el archivo directamente desde aqui.';
+
+    return `
+        <div class="form-field image-upload-field">
+            <span class="field-title">${escapeHtml(label)}</span>
+            <textarea class="editor-input editor-input-area editor-input-code" data-path="${escapeHtml(pathString)}">${escapeHtml(value)}</textarea>
+            <div class="image-upload-actions">
+                <label class="mini-btn mini-btn-file">
+                    Cargar imagen
+                    <input class="editor-file-input" data-path="${escapeHtml(pathString)}" type="file" accept="image/*" />
+                </label>
+                <button class="mini-btn mini-btn-muted" type="button" data-action="clear-image" data-path="${escapeHtml(pathString)}">Limpiar</button>
+            </div>
+            <span class="field-subtitle">${helperText}</span>
+            ${hasImage ? `
+                <div class="image-upload-preview">
+                    <img src="${escapeHtml(value)}" alt="Vista previa de la imagen cargada" loading="lazy" />
+                </div>
+            ` : '<div class="empty-state">Todavia no hay una imagen cargada para este bloque.</div>'}
+        </div>
+    `;
+};
+
 const renderPrimitiveField = (path, key, value, label) => {
     const pathString = pathToString(path);
 
@@ -481,6 +557,10 @@ const renderPrimitiveField = (path, key, value, label) => {
         `;
     }
 
+    if (isImageFieldPath(path, key)) {
+        return renderImageField(path, value, label);
+    }
+
     if (shouldUseTextarea(key, value)) {
         return `
             <label class="form-field">
@@ -504,6 +584,32 @@ const getArrayItemTitle = (item, index, label) => {
     }
 
     return `${singularize(label)} ${index + 1}`;
+};
+
+const getOrderedObjectEntries = (path, value) => {
+    const entries = Object.entries(value).map((entry, index) => ({ entry, index }));
+
+    if (path[0] === 'certificates' && path[1] === 'items' && typeof path[2] === 'number') {
+        const priorityMap = {
+            status: 0,
+            title: 1,
+            image: 2,
+            text: 3
+        };
+
+        entries.sort((left, right) => {
+            const leftPriority = priorityMap[left.entry[0]] ?? 99;
+            const rightPriority = priorityMap[right.entry[0]] ?? 99;
+
+            if (leftPriority !== rightPriority) {
+                return leftPriority - rightPriority;
+            }
+
+            return left.index - right.index;
+        });
+    }
+
+    return entries.map(({ entry }) => entry);
 };
 
 const renderFieldGroup = (path, key, value, isNested = false) => {
@@ -535,7 +641,7 @@ const renderFieldGroup = (path, key, value, isNested = false) => {
                                         <button class="mini-btn mini-btn-danger" type="button" data-action="remove-item" data-path="${escapeHtml(itemPathString)}">Eliminar</button>
                                     </div>
                                     <div class="field-stack">
-                                        ${Object.entries(item).map(([childKey, childValue]) => renderFieldGroup([...itemPath, childKey], childKey, childValue, true)).join('')}
+                                        ${getOrderedObjectEntries(itemPath, item).map(([childKey, childValue]) => renderFieldGroup([...itemPath, childKey], childKey, childValue, true)).join('')}
                                     </div>
                                 </article>
                             `;
@@ -557,7 +663,9 @@ const renderFieldGroup = (path, key, value, isNested = false) => {
     }
 
     if (isObject(value)) {
-        const innerFields = Object.entries(value).map(([childKey, childValue]) => renderFieldGroup([...path, childKey], childKey, childValue, true)).join('');
+        const innerFields = getOrderedObjectEntries(path, value)
+            .map(([childKey, childValue]) => renderFieldGroup([...path, childKey], childKey, childValue, true))
+            .join('');
 
         if (!isNested) {
             return `<div class="field-stack">${innerFields}</div>`;
@@ -668,6 +776,52 @@ const downloadContentFile = () => {
     setStatus('Se descargo un content.js actualizado.', 'success');
 };
 
+const readFileAsDataUrl = (file) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(String(reader.result || ''));
+    reader.onerror = () => reject(new Error('No se pudo leer el archivo.'));
+    reader.readAsDataURL(file);
+});
+
+const getCertificateDirectoryHandle = async () => {
+    if (certificateDirectoryHandle) {
+        return certificateDirectoryHandle;
+    }
+
+    if (typeof window.showDirectoryPicker !== 'function') {
+        throw new Error('directory-picker-not-supported');
+    }
+
+    const baseHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+
+    if (baseHandle.name === 'certificates') {
+        certificateDirectoryHandle = baseHandle;
+        return certificateDirectoryHandle;
+    }
+
+    if (baseHandle.name === 'static') {
+        certificateDirectoryHandle = await baseHandle.getDirectoryHandle('certificates', { create: true });
+        return certificateDirectoryHandle;
+    }
+
+    const staticHandle = await baseHandle.getDirectoryHandle('static', { create: true });
+    certificateDirectoryHandle = await staticHandle.getDirectoryHandle('certificates', { create: true });
+    return certificateDirectoryHandle;
+};
+
+const saveCertificateImageToStatic = async (file) => {
+    const directoryHandle = await getCertificateDirectoryHandle();
+    const fileName = normalizeImageFileName(file.name);
+    const fileHandle = await directoryHandle.getFileHandle(fileName, { create: true });
+    const writable = await fileHandle.createWritable();
+
+    await writable.write(file);
+    await writable.close();
+
+    return `${CERTIFICATE_STATIC_PATH}/${fileName}`;
+};
+
 panelsNode.addEventListener('input', (event) => {
     const target = event.target;
 
@@ -683,7 +837,7 @@ panelsNode.addEventListener('input', (event) => {
     updateSectionPreview(sectionKey);
 });
 
-panelsNode.addEventListener('change', (event) => {
+panelsNode.addEventListener('change', async (event) => {
     const target = event.target;
 
     if (target.matches('.editor-select')) {
@@ -701,6 +855,48 @@ panelsNode.addEventListener('change', (event) => {
         const label = target.closest('.toggle-field')?.querySelector('.toggle-control span');
         if (label) {
             label.textContent = target.checked ? 'Si' : 'No';
+        }
+
+        return;
+    }
+
+    if (target.matches('.editor-file-input')) {
+        const path = stringToPath(target.dataset.path);
+        const file = target.files && target.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        try {
+            if (isCertificateImagePath(path)) {
+                const relativePath = await saveCertificateImageToStatic(file);
+                setValueByPath(state, path, relativePath);
+                renderAll();
+                setStatus(`Imagen guardada en ${relativePath}`, 'success');
+                return;
+            }
+
+            const dataUrl = await readFileAsDataUrl(file);
+            setValueByPath(state, path, dataUrl);
+            renderAll();
+            setStatus(`Imagen cargada: ${file.name}`, 'success');
+        } catch (error) {
+            try {
+                const dataUrl = await readFileAsDataUrl(file);
+                setValueByPath(state, path, dataUrl);
+                renderAll();
+
+                if (isCertificateImagePath(path)) {
+                    setStatus('No se pudo guardar en static/certificates. La imagen se ha cargado temporalmente en base64.', 'error');
+                } else {
+                    setStatus(`Imagen cargada: ${file.name}`, 'success');
+                }
+            } catch (readError) {
+                setStatus('No se pudo cargar la imagen seleccionada.', 'error');
+            }
+        } finally {
+            target.value = '';
         }
     }
 });
@@ -728,6 +924,13 @@ panelsNode.addEventListener('click', (event) => {
         removeAtPath(state, path);
         renderAll();
         setStatus('Elemento eliminado.', 'success');
+        return;
+    }
+
+    if (action === 'clear-image') {
+        setValueByPath(state, path, '');
+        renderAll();
+        setStatus('Imagen eliminada.', 'success');
     }
 });
 

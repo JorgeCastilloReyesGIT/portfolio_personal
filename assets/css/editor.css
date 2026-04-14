@@ -437,6 +437,11 @@ code {
     line-height: 1.55;
 }
 
+.editor-input-code {
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 13px;
+}
+
 .toggle-field {
     padding: 14px 16px;
     border-radius: 16px;
@@ -504,6 +509,53 @@ code {
     color: #ffd0d0;
 }
 
+.mini-btn-muted {
+    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
+}
+
+.mini-btn-file {
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.editor-file-input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.image-upload-field code {
+    font-size: 12px;
+}
+
+.image-upload-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.image-upload-preview {
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.image-upload-preview img {
+    width: 100%;
+    max-height: 240px;
+    display: block;
+    object-fit: contain;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.96);
+}
+
 .empty-state {
     padding: 14px;
     border-radius: 16px;
@@ -558,6 +610,26 @@ code {
     margin-top: 6px;
     color: var(--muted);
     font-size: 13px;
+}
+
+.preview-item-media {
+    display: grid;
+    gap: 12px;
+}
+
+.preview-image {
+    overflow: hidden;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.preview-image img {
+    width: 100%;
+    max-height: 180px;
+    display: block;
+    object-fit: contain;
+    background: rgba(255, 255, 255, 0.96);
 }
 
 .preview-tags {
