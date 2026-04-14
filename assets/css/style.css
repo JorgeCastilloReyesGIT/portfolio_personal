@@ -930,10 +930,38 @@ section {
 }
 
 .certificate-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 24px 24px 18px;
+    scroll-snap-type: x proximity;
+    scrollbar-gutter: stable;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.32) rgba(255, 255, 255, 0.06);
+}
+
+.certificate-grid::-webkit-scrollbar {
+    height: 12px;
+}
+
+.certificate-grid::-webkit-scrollbar-track {
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.certificate-grid::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.28);
+}
+
+.certificate-grid.is-carousel-active {
+    scroll-behavior: auto;
 }
 
 .certificate-card {
+    flex: 0 0 clamp(280px, 32vw, 360px);
     min-width: 0;
     padding: 24px;
     border-radius: 24px;
@@ -943,6 +971,7 @@ section {
     display: grid;
     gap: 16px;
     align-content: start;
+    scroll-snap-align: start;
     transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
 }
 
@@ -1408,7 +1437,6 @@ footer {
     .skills-box,
     .about-main,
     .feature-card,
-    .certificate-card,
     .project-body,
     .timeline-item,
     .education-card {
@@ -1435,6 +1463,14 @@ footer {
 
     .certificate-modal {
         padding: 16px;
+    }
+
+    .certificate-grid {
+        padding: 20px 20px 16px;
+    }
+
+    .certificate-card {
+        flex-basis: min(82vw, 310px);
     }
 
     .certificate-modal-dialog {

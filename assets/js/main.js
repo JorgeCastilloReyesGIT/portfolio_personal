@@ -327,8 +327,157 @@ const closeCertificateModal = () => {
     document.body.classList.remove('modal-open');
 };
 
+const initCertificateCarousel = () => {
+    const carousel = document.querySelector('.certificate-grid');
+
+    if (!carousel) {
+        return;
+    }
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const autoScrollSpeed = 18;
+    let direction = 1;
+    let frame = 0;
+    let lastFrameTime = 0;
+    let resumeTimer = 0;
+    let autoScrolling = false;
+
+    const hasOverflow = () => carousel.scrollWidth - carousel.clientWidth > 12;
+
+    const syncDirectionWithPosition = () => {
+        const maxScrollLeft = Math.max(carousel.scrollWidth - carousel.clientWidth, 0);
+
+        if (carousel.scrollLeft <= 1) {
+            direction = 1;
+            return;
+        }
+
+        if (carousel.scrollLeft >= maxScrollLeft - 1) {
+            direction = -1;
+        }
+    };
+
+    const stopAutoScroll = () => {
+        if (frame) {
+            cancelAnimationFrame(frame);
+            frame = 0;
+        }
+
+        lastFrameTime = 0;
+    };
+
+    const tick = (timestamp) => {
+        if (!hasOverflow()) {
+            carousel.classList.remove('is-carousel-active');
+            stopAutoScroll();
+            return;
+        }
+
+        carousel.classList.add('is-carousel-active');
+
+        if (!lastFrameTime) {
+            lastFrameTime = timestamp;
+        }
+
+        const deltaSeconds = Math.min((timestamp - lastFrameTime) / 1000, 0.05);
+        const maxScrollLeft = Math.max(carousel.scrollWidth - carousel.clientWidth, 0);
+        let nextScrollLeft = carousel.scrollLeft + (direction * autoScrollSpeed * deltaSeconds);
+
+        if (nextScrollLeft <= 0) {
+            nextScrollLeft = 0;
+            direction = 1;
+        } else if (nextScrollLeft >= maxScrollLeft) {
+            nextScrollLeft = maxScrollLeft;
+            direction = -1;
+        }
+
+        autoScrolling = true;
+        carousel.scrollLeft = nextScrollLeft;
+        autoScrolling = false;
+
+        lastFrameTime = timestamp;
+        frame = requestAnimationFrame(tick);
+    };
+
+    const startAutoScroll = () => {
+        if (reduceMotion || frame || !hasOverflow()) {
+            return;
+        }
+
+        syncDirectionWithPosition();
+        carousel.classList.add('is-carousel-active');
+        lastFrameTime = 0;
+        frame = requestAnimationFrame(tick);
+    };
+
+    const scheduleAutoScrollResume = (delay = 1800) => {
+        clearTimeout(resumeTimer);
+
+        if (reduceMotion || !hasOverflow()) {
+            return;
+        }
+
+        resumeTimer = window.setTimeout(() => {
+            startAutoScroll();
+        }, delay);
+    };
+
+    carousel.addEventListener('pointerenter', () => {
+        clearTimeout(resumeTimer);
+        stopAutoScroll();
+    });
+
+    carousel.addEventListener('pointerleave', () => {
+        scheduleAutoScrollResume(400);
+    });
+
+    carousel.addEventListener('focusin', () => {
+        clearTimeout(resumeTimer);
+        stopAutoScroll();
+    });
+
+    carousel.addEventListener('focusout', () => {
+        scheduleAutoScrollResume();
+    });
+
+    carousel.addEventListener('touchstart', () => {
+        clearTimeout(resumeTimer);
+        stopAutoScroll();
+    }, { passive: true });
+
+    carousel.addEventListener('touchend', () => {
+        scheduleAutoScrollResume();
+    }, { passive: true });
+
+    carousel.addEventListener('scroll', () => {
+        syncDirectionWithPosition();
+
+        if (!autoScrolling) {
+            stopAutoScroll();
+            scheduleAutoScrollResume();
+        }
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+        clearTimeout(resumeTimer);
+        syncDirectionWithPosition();
+
+        if (hasOverflow()) {
+            scheduleAutoScrollResume(150);
+            return;
+        }
+
+        carousel.classList.remove('is-carousel-active');
+        carousel.scrollLeft = 0;
+        stopAutoScroll();
+    }, { passive: true });
+
+    startAutoScroll();
+};
+
 renderPortfolioContent();
 applySectionOrder(content.sectionOrder);
+initCertificateCarousel();
 
 document.addEventListener('click', (event) => {
     const certificateCard = event.target.closest('.certificate-card-clickable');
