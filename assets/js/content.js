@@ -4,7 +4,8 @@ window.defaultPortfolioContent = {
         { label: 'Proyectos', href: '#proyectos' },
         { label: 'Experiencia', href: '#experiencia' },
         { label: 'Skills', href: '#skills' },
-        { label: 'Certificados', href: '#certificados' },
+        { label: 'Formación', href: '#formacion' },
+        { label: 'Sobre mí', href: '#sobre-mi' },
         { label: 'Contacto', href: '#contacto' }
     ],
 
@@ -28,27 +29,27 @@ window.defaultPortfolioContent = {
     hero: {
         titleFirst: 'Jorge',
         titleLast: 'Castillo',
-        description: 'Desarrollador de software con enfoque en backend, automatizacion y despliegue. Trabajo con Java, Spring Boot, Python, Django y SQL para construir APIs, herramientas utiles e integraciones reales. Tambien manejo n8n, Docker, Portainer, Coolify y VPS para llevar proyectos desde la idea hasta produccion.',
+        description: 'Desarrollador de software enfocado en backend, automatización y despliegue. Trabajo con Java, Spring Boot, Python, Django y SQL para construir APIs, herramientas internas e integraciones reales. También uso n8n, Docker, Portainer, Coolify y VPS para llevar proyectos desde la idea hasta producción.',
         photo: {
             src: 'assets/img/selfie.jpg',
-            alt: 'Foto de Jorge Castillo'
+            alt: 'Retrato profesional de Jorge Castillo'
         },
         actions: [
-            { label: 'Ver proyectos ->', href: '#proyectos', variant: 'primary' },
+            { label: 'Ver proyectos →', href: '#proyectos', variant: 'primary' },
             { label: 'Contactar', href: '#contacto', variant: 'secondary' }
         ],
         stats: [
             {
                 title: 'Backend',
-                text: 'Java, Spring Boot, Python y Django'
+                text: 'Java, Spring Boot, Python, Django y SQL'
             },
             {
-                title: 'Automatizacion',
-                text: 'n8n, APIs, integraciones y flujos utiles'
+                title: 'Automatización',
+                text: 'n8n, APIs, webhooks e integraciones'
             },
             {
                 title: 'Deploy',
-                text: 'Docker, Portainer, Coolify y VPS'
+                text: 'Docker, Linux, Nginx, Coolify y VPS'
             }
         ]
     },
@@ -57,11 +58,11 @@ window.defaultPortfolioContent = {
         {
             icon: '01',
             title: 'Backend que resuelve',
-            description: 'Construyo APIs, logica de negocio y acceso a datos con una base limpia para que el producto sea mantenible y pueda crecer.'
+            description: 'Construyo APIs, lógica de negocio y acceso a datos con una base limpia para que el producto sea mantenible y pueda crecer.'
         },
         {
             icon: '02',
-            title: 'Automatizacion util',
+            title: 'Automatización útil',
             description: 'Creo flujos con n8n y APIs para conectar herramientas, reducir trabajo manual y acelerar tareas repetitivas.'
         },
         {
@@ -73,57 +74,92 @@ window.defaultPortfolioContent = {
 
     projects: {
         eyebrow: 'Proyectos',
-        title: 'Lo que puedo aportar',
-        copy: 'Soluciones pensadas para empresa: backend, automatizacion y despliegue con foco en utilidad real.',
+        title: 'Proyectos destacados',
+        copy: 'Proyectos propios y casos prácticos donde aplico backend, automatización, APIs, IA y despliegue en entornos reales.',
         items: [
             {
-                label: 'Backend · Producto',
-                title: 'Backends y APIs para producto',
-                description: 'Desarrollo servicios con Java y Spring Boot o con Django para exponer APIs claras, conectar datos y soportar procesos reales de negocio.',
-                tags: ['Spring Boot', 'Django', 'REST APIs']
+                label: 'IA · Automatización',
+                title: 'Calculadora de afinidad CV-oferta',
+                description: 'Aplicación pensada para analizar una oferta de empleo, compararla con un CV y generar una puntuación de afinidad usando IA, APIs y lógica de negocio.',
+                tags: ['IA', 'APIs', 'Python', 'Automatización']
             },
             {
-                label: 'Automatizacion · Integracion',
-                title: 'Automatizaciones con n8n',
-                description: 'Diseno flujos para conectar APIs, formularios, bases de datos y tareas internas con el objetivo de ahorrar tiempo y reducir pasos manuales.',
-                tags: ['n8n', 'APIs', 'Integraciones']
+                label: 'Web · n8n · Leads',
+                title: 'Web profesional con captación automatizada',
+                description: 'Página web conectada a n8n mediante webhooks para recibir formularios, enviar avisos internos y automatizar respuestas profesionales por email.',
+                tags: ['HTML', 'CSS', 'JavaScript', 'n8n', 'Webhooks']
             },
             {
-                label: 'Deploy · Infra',
-                title: 'Deploy en VPS con Docker',
-                description: 'Preparo entornos con Docker y gestiono servicios con Portainer o Coolify para publicar proyectos con mas control, rapidez y autonomia.',
-                tags: ['Docker', 'Portainer', 'Coolify']
+                label: 'Deploy · Infraestructura',
+                title: 'Despliegue de servicios en VPS',
+                description: 'Configuración de servicios en servidor Linux con Docker, Nginx, dominios, HTTPS, Portainer y herramientas de administración para publicar proyectos reales.',
+                tags: ['Linux', 'Docker', 'Nginx', 'VPS', 'HTTPS']
             }
         ]
     },
 
     skills: {
         eyebrow: 'Skills',
-        title: 'Stack con el que trabajo',
-        copy: 'Tecnologias orientadas a desarrollo backend, automatizacion de procesos y despliegue de proyectos reales.',
+        title: 'Tecnologías y herramientas',
+        copy: 'Stack orientado a desarrollo backend, automatización de procesos, integración con APIs, IA aplicada y despliegue de proyectos reales.',
         items: [
             'Java',
             'Spring Boot',
             'JPA / Hibernate',
+            'Maven / Gradle',
+
             'Python',
             'Django',
+            'Django REST Framework',
             'REST APIs',
-            'n8n',
+            'API Integration',
+            'Webhooks',
+            'JSON',
+            'OAuth2',
+
             'PostgreSQL',
             'MySQL',
             'SQLite',
+            'SQL',
+
+            'n8n',
+            'Automation Workflows',
+            'OpenAI API',
+            'LLM Integration',
+            'Prompt Engineering',
+            'AI Automation',
+            'n8n AI Workflows',
+            'AI Assistants',
+            'Chatbot Development',
+            'Webhooks + AI',
+            'API-based AI Tools',
+            'Document AI',
+            'RAG Basics',
+            'Semantic Search Basics',
+            'AI Agents Basics',
+            'Multi-agent Workflows',
+
             'Docker',
             'Portainer',
             'Coolify',
             'VPS',
+            'Linux',
+            'Ubuntu Server',
+            'Nginx',
+            'SSH',
+            'HTTPS',
+
             'Git',
             'GitHub',
-            'Linux',
+            'GitHub Actions',
+            'CI/CD',
+
             'HTML',
             'CSS',
             'JavaScript',
+            'Bootstrap',
             'Testing',
-            'Maven / Gradle'
+            'System Design'
         ]
     },
 
@@ -138,12 +174,12 @@ window.defaultPortfolioContent = {
                 role: 'Programador Junior Python',
                 company: 'Halltic Tech S.L.',
                 location: 'Madrid',
-                mode: 'Hibrido',
-                pills: ['Contrato de practicas', 'Programador'],
+                mode: 'Híbrido',
+                pills: ['Contrato de prácticas', 'Programador'],
                 bullets: [
-                    'Desarrollo y apoyo tecnico en soluciones basadas en Python para necesidades reales de empresa.',
-                    'Trabajo con Git, JSON y tareas de programacion orientadas a necesidades reales de empresa.',
-                    'Experiencia en entorno hibrido, aprendizaje rapido y colaboracion profesional con equipo y cliente.'
+                    'Desarrollo y apoyo técnico en soluciones basadas en Python para necesidades reales de empresa.',
+                    'Trabajo con Git, JSON y tareas de programación orientadas a necesidades reales de empresa.',
+                    'Experiencia en entorno híbrido, aprendizaje rápido y colaboración profesional con equipo y cliente.'
                 ]
             },
             {
@@ -152,38 +188,38 @@ window.defaultPortfolioContent = {
                 company: 'UTAI SOFTWARE',
                 pills: ['Programador full stack'],
                 bullets: [
-                    'Creacion de interfaces web con HTML, CSS, JavaScript y Bootstrap.',
+                    'Creación de interfaces web con HTML, CSS, JavaScript y Bootstrap.',
                     'Desarrollo de APIs REST con Java y Spring Boot.',
-                    'Gestion de base de datos con JPA/Hibernate y PostgreSQL.',
+                    'Gestión de base de datos con JPA/Hibernate y PostgreSQL.',
                     'Desarrollo de APIs REST con Django y Django REST Framework.',
-                    'Integracion de funcionalidades de IA mediante la API de OpenAI.'
+                    'Integración de funcionalidades de IA mediante la API de OpenAI.'
                 ]
             },
             {
                 period: '2023',
-                role: 'Tecnico Operaciones N1',
+                role: 'Técnico Operaciones N1',
                 company: 'WESTCON COMSTOR',
                 bullets: [
-                    'Resolucion de alertas y tickets.',
+                    'Resolución de alertas y tickets.',
                     'Contacto con herramientas y entornos de seguridad como Fortigate y Palo Alto.',
-                    'Experiencia practica en soporte, seguimiento y respuesta operativa.'
+                    'Experiencia práctica en soporte, seguimiento y respuesta operativa.'
                 ]
             }
         ]
     },
 
     about: {
-        eyebrow: 'Sobre mi',
-        title: 'Perfil tecnico con mentalidad de solucion',
-        description: 'Soy desarrollador con base en software, sistemas y redes. Me adapto rapido, aprendo nuevas herramientas con facilidad y disfruto construyendo soluciones que funcionen bien tanto en desarrollo como en produccion.',
+        eyebrow: 'Sobre mí',
+        title: 'Perfil técnico con mentalidad resolutiva',
+        description: 'Soy desarrollador con base en software, sistemas y redes. Me adapto rápido, aprendo nuevas herramientas con facilidad y disfruto construyendo soluciones que funcionen bien tanto en desarrollo como en producción.',
         cards: [
             {
                 title: 'Mentalidad',
-                text: 'Aprender rapido, aportar valor pronto y seguir mejorando con cada proyecto.'
+                text: 'Aprender rápido, aportar valor pronto y seguir mejorando con cada proyecto.'
             },
             {
                 title: 'Fortaleza',
-                text: 'Combino backend, automatizacion y despliegue para entregar soluciones mas completas.'
+                text: 'Combino backend, automatización y despliegue para entregar soluciones más completas.'
             },
             {
                 title: 'Forma de trabajar',
@@ -191,69 +227,69 @@ window.defaultPortfolioContent = {
             },
             {
                 title: 'Objetivo',
-                text: 'Incorporarme a un equipo donde pueda crecer, aportar desde el primer dia y seguir ganando experiencia como developer.'
+                text: 'Incorporarme a un equipo donde pueda crecer, aportar desde el primer día y seguir ganando experiencia como developer.'
             }
         ]
     },
 
     education: {
-        eyebrow: 'Formacion',
-        title: 'Base tecnica',
-        copy: 'Una base tecnica que une desarrollo, sistemas y redes, algo muy util para entender el producto completo.',
+        eyebrow: 'Formación',
+        title: 'Formación técnica',
+        copy: 'Una base técnica que une desarrollo, sistemas y redes, algo muy útil para entender el producto completo.',
         items: [
             {
                 period: '2023 - 2025',
                 title: 'F.P. Grado Superior en Desarrollo de Aplicaciones Multiplataforma',
-                place: 'IES Pio Baroja',
-                text: 'Profundizacion en backend, bases de datos, interfaces graficas, programacion orientada a objetos y desarrollo de software multiplataforma.'
+                place: 'IES Pío Baroja',
+                text: 'Profundización en backend, bases de datos, interfaces gráficas, programación orientada a objetos y desarrollo de software multiplataforma.'
             },
             {
                 period: '2021 - 2023',
-                title: 'F.P. Grado Medio en Sistemas Microinformaticos y Redes',
-                place: 'CFPE Fundacion Tomillo',
-                text: 'Base tecnica en sistemas, mantenimiento, redes, servidores, hardware y administracion de entornos informaticos.'
+                title: 'F.P. Grado Medio en Sistemas Microinformáticos y Redes',
+                place: 'CFPE Fundación Tomillo',
+                text: 'Base técnica en sistemas, mantenimiento, redes, servidores, hardware y administración de entornos informáticos.'
             },
             {
                 period: '2019 - 2021',
-                title: 'F.P. Basica en Informatica y Comunicaciones',
-                place: 'CFPE Fundacion Tomillo',
-                text: 'Primeros cimientos solidos en informatica, soporte, entorno de oficina y conocimientos tecnicos esenciales.'
+                title: 'F.P. Básica en Informática y Comunicaciones',
+                place: 'CFPE Fundación Tomillo',
+                text: 'Primeros cimientos sólidos en informática, soporte, entorno de oficina y conocimientos técnicos esenciales.'
             }
         ]
     },
 
     certificates: {
         eyebrow: 'Certificados',
-        title: 'Ventana para certificaciones',
-        copy: 'He dejado esta seccion preparada para mostrar certificados, diplomas o acreditaciones tecnicas de forma clara y visual.',
+        title: 'Formación complementaria',
+        copy: 'Sección preparada para mostrar certificados, diplomas y formación técnica verificable relacionada con backend, despliegue, automatización e IA aplicada.',
         windowLabel: 'certificados.dev',
         items: [
             {
-                status: 'Espacio destacado',
-                title: 'Certificado principal',
+                status: 'En progreso',
+                title: 'Backend, cloud y automatización',
                 image: {
                     src: '',
-                    alt: 'Vista previa del certificado principal'
+                    alt: 'Formación en backend, cloud y automatización'
                 },
-                text: 'Anade aqui tu certificacion mas potente con nombre del curso, entidad emisora y fecha.'
+                text: 'Actualmente estoy ampliando mi formación en APIs, despliegue, servidores Linux, automatización e integración de herramientas con IA.'
             },
             {
-                status: 'Tecnico',
-                title: 'Segundo certificado',
+                status: 'Práctico',
+                title: 'Proyectos propios',
                 image: {
                     src: '',
-                    alt: 'Vista previa del segundo certificado'
+                    alt: 'Proyectos propios de desarrollo y automatización'
                 },
-                text: 'Ideal para cursos de backend, Docker, despliegue, cloud, automatizacion o herramientas de desarrollo.'
+                text: 'Portfolio, automatizaciones con n8n, despliegues en VPS y pruebas reales con APIs, webhooks y flujos de IA aplicados a casos concretos.'
             },
             {
-                status: 'Complementario',
-                title: 'Tercer certificado',
+                status: 'Objetivo',
+                title: 'Certificaciones técnicas',
                 image: {
                     src: '',
-                    alt: 'Vista previa del tercer certificado'
+                    alt: 'Certificaciones técnicas futuras'
                 },
-                text: 'Tambien puedes usar esta tarjeta para diplomas, cursos internos, practicas o formacion adicional relevante.'
+                text: 'Esta sección está lista para añadir certificados verificables de backend, Docker, cloud, bases de datos, automatización o desarrollo profesional.'
             }
         ]
     },
@@ -277,15 +313,27 @@ window.defaultPortfolioContent = {
             { label: 'Ver trabajo', href: '#proyectos', variant: 'secondary' }
         ],
         socials: [
-            { short: 'GH', label: 'GitHub', href: '#' },
-            { short: 'in', label: 'LinkedIn', href: '#' },
-            { short: '@', label: 'Correo', href: 'mailto:jorge.a.castilloreyes@gmail.com' }
+            {
+                short: 'GH',
+                label: 'GitHub',
+                href: 'https://github.com/JorgeCastilloReyesGIT'
+            },
+            {
+                short: 'in',
+                label: 'LinkedIn',
+                href: 'https://www.linkedin.com/in/jorge-a-castillo/'
+            },
+            {
+                short: '@',
+                label: 'Correo',
+                href: 'mailto:jorge.a.castilloreyes@gmail.com'
+            }
         ]
     },
 
     footer: {
         left: '© 2026 Jorge Castillo. Portfolio personal.',
-        right: 'Backend, automatizacion, despliegue y ganas de seguir creciendo.'
+        right: 'Backend, automatización, APIs, despliegue e IA aplicada.'
     }
 };
 
