@@ -5,13 +5,13 @@ window.defaultPortfolioContent = {
         { label: 'Experiencia', href: '#experiencia' },
         { label: 'Skills', href: '#skills' },
         { label: 'Formación', href: '#formacion' },
-        { label: 'Sobre mí', href: '#sobre-mi' },
+        { label: 'Certificados', href: '#certificados' },
         { label: 'Contacto', href: '#contacto' }
     ],
 
     headerCta: {
-        label: 'Hablemos',
-        href: '#contacto'
+        label: 'Descargar CV',
+        href: 'assets/docs/cv-jorge-castillo.pdf'
     },
 
     sectionOrder: [
@@ -29,7 +29,7 @@ window.defaultPortfolioContent = {
     hero: {
         titleFirst: 'Jorge',
         titleLast: 'Castillo',
-        description: 'Desarrollador junior enfocado en backend, automatización e IA aplicada. Trabajo con Java, Spring Boot, Python, Django y SQL para construir APIs, herramientas internas e integraciones reales. También uso n8n, OpenAI API, Docker, Nginx y VPS para crear soluciones útiles desde la idea hasta producción.',
+        description: 'Junior Backend Developer enfocado en Python, Java/Spring Boot, APIs, automatización e IA aplicada. Construyo herramientas internas, integraciones y flujos con n8n, OpenAI API, SQL, Docker, Nginx y VPS, con mentalidad práctica: entender el problema, desarrollar una solución mantenible y llevarla a producción.',
         photo: {
             src: 'assets/img/selfie.jpg',
             alt: 'Retrato profesional de Jorge Castillo'
@@ -41,15 +41,15 @@ window.defaultPortfolioContent = {
         stats: [
             {
                 title: 'Backend',
-                text: 'Java, Spring Boot, Python, Django y SQL'
+                text: 'Python, Java, Spring Boot, Django, REST APIs y SQL'
             },
             {
                 title: 'Automatización + IA',
-                text: 'n8n, OpenAI API, webhooks e integraciones'
+                text: 'n8n, OpenAI API, webhooks, JSON e integraciones'
             },
             {
                 title: 'Deploy',
-                text: 'Docker, Linux, Nginx, Coolify y VPS'
+                text: 'Docker, Linux, Nginx, HTTPS, Coolify y VPS'
             }
         ]
     },
@@ -57,39 +57,39 @@ window.defaultPortfolioContent = {
     features: [
         {
             icon: '01',
-            title: 'Backend que resuelve',
-            description: 'Construyo APIs, lógica de negocio y acceso a datos con una base limpia para que el producto sea mantenible y pueda crecer.'
+            title: 'Backend mantenible',
+            description: 'Desarrollo APIs, lógica de negocio, modelos de datos y servicios con una estructura clara para que el proyecto pueda crecer sin volverse caótico.'
         },
         {
             icon: '02',
-            title: 'Automatización útil',
-            description: 'Creo flujos con n8n y APIs para conectar herramientas, reducir trabajo manual y acelerar tareas repetitivas.'
+            title: 'Automatización práctica',
+            description: 'Conecto formularios, APIs, webhooks, email y herramientas internas para reducir tareas manuales y mejorar la velocidad de respuesta.'
         },
         {
             icon: '03',
             title: 'Deploy con criterio',
-            description: 'Puedo preparar entornos con Docker, Portainer, Coolify y VPS para publicar proyectos y dejarlos funcionando con orden.'
+            description: 'Preparo entornos en Linux con Docker, Nginx, HTTPS y VPS para publicar proyectos reales y entender el ciclo completo de entrega.'
         }
     ],
 
     projects: {
         eyebrow: 'Proyectos',
         title: 'Proyectos destacados',
-        copy: 'Proyectos propios y casos prácticos donde aplico backend, automatización, APIs, IA y despliegue en entornos reales.',
+        copy: 'Casos prácticos orientados a backend, automatización, IA aplicada, APIs y despliegue. Cada proyecto está pensado para resolver un problema concreto y demostrar trabajo real.',
         items: [
             {
                 label: 'IA · Automatización',
                 title: 'Calculadora de afinidad CV-oferta',
-                description: 'Aplicación pensada para analizar una oferta de empleo, compararla con un CV y generar una puntuación de afinidad usando IA, APIs y lógica de negocio.',
-                tags: ['IA', 'APIs', 'Python', 'Automatización'],
+                description: 'Herramienta para comparar una oferta de empleo con un CV y generar una puntuación de afinidad. El objetivo es aplicar IA a un problema real de selección: detectar encaje, brechas técnicas y mejoras del perfil.',
+                tags: ['Python', 'IA aplicada', 'APIs', 'Automatización'],
                 links: [
                     { label: 'Ver código', href: 'https://github.com/JorgeCastilloReyesGIT/calculadora_de_afinidad' }
                 ]
             },
             {
                 label: 'Web · n8n · Leads',
-                title: 'Web profesional con captación automatizada',
-                description: 'Página web conectada a n8n mediante webhooks para recibir formularios, enviar avisos internos y automatizar respuestas profesionales por email.',
+                title: 'Captación automatizada de contactos',
+                description: 'Web conectada a flujos de n8n mediante webhooks para recibir formularios, enviar avisos internos y preparar respuestas profesionales. Demuestra integración entre frontend, automatización y procesos comerciales.',
                 tags: ['HTML', 'CSS', 'JavaScript', 'n8n', 'Webhooks'],
                 links: [
                     { label: 'Ver portfolio', href: 'https://github.com/JorgeCastilloReyesGIT/portfolio_personal' }
@@ -98,8 +98,14 @@ window.defaultPortfolioContent = {
             {
                 label: 'Deploy · Infraestructura',
                 title: 'Despliegue de servicios en VPS',
-                description: 'Configuración de servicios en servidor Linux con Docker, Nginx, dominios, HTTPS, Portainer y herramientas de administración para publicar proyectos reales.',
+                description: 'Configuración de servicios en servidor Linux con Docker, Nginx, dominios, HTTPS y herramientas de administración. Proyecto orientado a entender producción, logs, proxy inverso y mantenimiento básico.',
                 tags: ['Linux', 'Docker', 'Nginx', 'VPS', 'HTTPS']
+            },
+            {
+                label: 'Backend · APIs',
+                title: 'APIs REST con Java y Django',
+                description: 'Desarrollo de servicios backend con estructura por capas, persistencia con ORM, conexión a PostgreSQL y endpoints REST pensados para aplicaciones web o móviles.',
+                tags: ['Java', 'Spring Boot', 'Django', 'REST APIs', 'PostgreSQL']
             }
         ]
     },
@@ -107,43 +113,36 @@ window.defaultPortfolioContent = {
     skills: {
         eyebrow: 'Skills',
         title: 'Tecnologías y herramientas',
-        copy: 'Stack orientado a desarrollo backend, automatización de procesos, integración con APIs, IA aplicada y despliegue de proyectos reales.',
+        copy: 'Stack centrado en backend, automatización, integración con APIs, IA aplicada y despliegue de proyectos reales.',
         items: [
+            'Python',
             'Java',
             'Spring Boot',
-            'JPA / Hibernate',
-            'Maven / Gradle',
-
-            'Python',
             'Django',
             'Django REST Framework',
             'REST APIs',
-            'API Integration',
-            'Webhooks',
-            'JSON',
-
+            'JPA / Hibernate',
+            'Maven / Gradle',
             'PostgreSQL',
             'MySQL',
             'SQLite',
             'SQL',
-
             'n8n',
-            'Automation Workflows',
+            'Webhooks',
+            'JSON',
+            'API Integration',
             'OpenAI API',
             'AI Automation',
-
             'Docker',
-            'Portainer',
-            'Coolify',
-            'VPS',
             'Linux',
             'Nginx',
-            'SSH',
+            'VPS',
             'HTTPS',
-
+            'SSH',
+            'Portainer',
+            'Coolify',
             'Git',
             'GitHub',
-
             'HTML',
             'CSS',
             'JavaScript',
@@ -155,7 +154,7 @@ window.defaultPortfolioContent = {
     experience: {
         eyebrow: 'Experiencia',
         title: 'Experiencia profesional',
-        copy: 'Mi recorrido combina desarrollo, automatización, backend y soporte técnico. Eso me ayuda a entender mejor el producto, la entrega y el contexto real del negocio.',
+        copy: 'Experiencia práctica en desarrollo, backend, automatización y soporte técnico. Mi valor está en combinar código, integración y contexto real de negocio.',
         items: [
             {
                 featured: true,
@@ -180,11 +179,11 @@ window.defaultPortfolioContent = {
                 company: 'UTAI SOFTWARE',
                 pills: ['APIs', 'Backend', 'IA aplicada'],
                 bullets: [
+                    'Desarrollo de APIs REST con Java, Spring Boot, Django y Django REST Framework.',
+                    'Gestión de persistencia con JPA/Hibernate y PostgreSQL.',
                     'Creación de interfaces web con HTML, CSS, JavaScript y Bootstrap.',
-                    'Desarrollo de APIs REST con Java y Spring Boot.',
-                    'Gestión de base de datos con JPA/Hibernate y PostgreSQL.',
-                    'Desarrollo de APIs REST con Django y Django REST Framework.',
-                    'Integración de funcionalidades de IA mediante la API de OpenAI.'
+                    'Integración de funcionalidades de IA mediante la API de OpenAI.',
+                    'Colaboración en soluciones orientadas a conectar backend, datos y experiencia de usuario.'
                 ]
             },
             {
@@ -193,9 +192,9 @@ window.defaultPortfolioContent = {
                 company: 'WESTCON COMSTOR',
                 pills: ['Soporte', 'Operaciones', 'Seguridad'],
                 bullets: [
-                    'Resolución de alertas y tickets técnicos.',
+                    'Resolución de alertas y tickets técnicos en entorno operativo.',
                     'Contacto con herramientas y entornos de seguridad como Fortigate y Palo Alto.',
-                    'Experiencia práctica en soporte, seguimiento y respuesta operativa.'
+                    'Seguimiento de incidencias, respuesta operativa y comunicación con equipos técnicos.'
                 ]
             }
         ]
@@ -204,23 +203,23 @@ window.defaultPortfolioContent = {
     about: {
         eyebrow: 'Sobre mí',
         title: 'Perfil técnico con mentalidad resolutiva',
-        description: 'Soy desarrollador con base en software, sistemas y redes. Me adapto rápido, aprendo nuevas herramientas con facilidad y disfruto construyendo soluciones que funcionen bien tanto en desarrollo como en producción.',
+        description: 'Soy desarrollador junior con base en software, sistemas y redes. Me interesa construir soluciones útiles: APIs, automatizaciones, herramientas internas, integraciones con IA y despliegues controlados. Aprendo rápido, trabajo con orden y busco aportar valor desde tareas reales.',
         cards: [
             {
                 title: 'Mentalidad',
-                text: 'Aprender rápido, aportar valor pronto y seguir mejorando con cada proyecto.'
+                text: 'Entender primero el problema, después construir una solución simple, mantenible y útil.'
             },
             {
                 title: 'Fortaleza',
-                text: 'Combino backend, automatización y despliegue para entregar soluciones más completas.'
+                text: 'Combino backend, automatización y despliegue para entender el ciclo completo de una solución.'
             },
             {
                 title: 'Forma de trabajar',
-                text: 'Me gusta trabajar con orden, comunicar claro y dejar una base limpia para que el proyecto pueda crecer.'
+                text: 'Me gusta documentar, usar Git con orden, comunicar claro y dejar una base limpia para seguir iterando.'
             },
             {
                 title: 'Objetivo',
-                text: 'Incorporarme a un equipo donde pueda crecer, aportar desde el primer día y seguir ganando experiencia como developer.'
+                text: 'Crecer como backend developer en un equipo donde pueda aportar, aprender buenas prácticas y construir producto real.'
             }
         ]
     },
@@ -228,25 +227,25 @@ window.defaultPortfolioContent = {
     education: {
         eyebrow: 'Formación',
         title: 'Formación técnica',
-        copy: 'Una base técnica que une desarrollo, sistemas y redes, algo muy útil para entender el producto completo.',
+        copy: 'Base técnica en desarrollo, sistemas y redes. Esta combinación me ayuda a entender tanto el código como el entorno donde se ejecuta.',
         items: [
             {
                 period: '2023 - 2025',
                 title: 'F.P. Grado Superior en Desarrollo de Aplicaciones Multiplataforma',
                 place: 'IES Pío Baroja',
-                text: 'Profundización en backend, bases de datos, interfaces gráficas, programación orientada a objetos y desarrollo de software multiplataforma.'
+                text: 'Formación en programación, backend, bases de datos, interfaces gráficas, APIs, programación orientada a objetos y desarrollo multiplataforma.'
             },
             {
                 period: '2021 - 2023',
                 title: 'F.P. Grado Medio en Sistemas Microinformáticos y Redes',
                 place: 'CFPE Fundación Tomillo',
-                text: 'Base técnica en sistemas, mantenimiento, redes, servidores, hardware y administración de entornos informáticos.'
+                text: 'Base técnica en sistemas, redes, servidores, mantenimiento, soporte y administración de entornos informáticos.'
             },
             {
                 period: '2019 - 2021',
                 title: 'F.P. Básica en Informática y Comunicaciones',
                 place: 'CFPE Fundación Tomillo',
-                text: 'Primeros cimientos sólidos en informática, soporte, entorno de oficina y conocimientos técnicos esenciales.'
+                text: 'Primeros fundamentos en informática, soporte, herramientas de oficina, hardware y conocimientos técnicos esenciales.'
             }
         ]
     },
@@ -254,7 +253,7 @@ window.defaultPortfolioContent = {
     certificates: {
         eyebrow: 'Certificados',
         title: 'Formación complementaria',
-        copy: 'Certificados y formación complementaria relacionada con backend, automatización, programación e IA aplicada.',
+        copy: 'Certificados y formación complementaria relacionada con programación, automatización, backend e IA aplicada.',
         windowLabel: 'certificados.dev',
         items: [
             {
@@ -290,7 +289,7 @@ window.defaultPortfolioContent = {
     contact: {
         eyebrow: 'Contacto',
         title: 'Busco mi siguiente oportunidad',
-        copy: 'Si buscas un perfil junior con buena base técnica, capacidad de adaptación y ganas reales de aportar en backend, automatización o despliegue, estaré encantado de hablar contigo.',
+        copy: 'Si buscas un perfil junior con buena base técnica, aprendizaje rápido y ganas reales de aportar en backend, automatización, APIs o despliegue, estaré encantado de hablar contigo.',
         details: [
             {
                 text: 'jorge.a.castilloreyes@gmail.com',
@@ -303,7 +302,7 @@ window.defaultPortfolioContent = {
         ],
         actions: [
             { label: 'Escribirme', href: 'mailto:jorge.a.castilloreyes@gmail.com', variant: 'primary' },
-            { label: 'Ver trabajo', href: '#proyectos', variant: 'secondary' }
+            { label: 'Descargar CV', href: 'assets/docs/cv-jorge-castillo.pdf', variant: 'secondary' }
         ],
         socials: [
             {
