@@ -1,4 +1,5 @@
 const content = window.portfolioContent;
+
 const sectionSelectorMap = {
     hero: '#hero',
     features: '#features',
@@ -15,15 +16,19 @@ const navigationSectionKeyMap = {
     '#proyectos': 'projects',
     '#skills': 'skills',
     '#experiencia': 'experience',
+    '#formacion': 'education',
+    '#sobre-mi': 'about',
     '#certificados': 'certificates',
     '#contacto': 'contact'
 };
-const escapeHtml = (value) => String(value)
+
+const escapeHtml = (value) => String(value ?? '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+
 const isExternalHttpLink = (href) => /^https?:\/\//i.test(String(href));
 const getLinkAttributes = (href) => isExternalHttpLink(href) ? ' target="_blank" rel="noreferrer"' : '';
 
@@ -46,19 +51,19 @@ const delayClass = (index) => {
     return `reveal${delays[index % delays.length]}`;
 };
 
-const renderButtons = (items) => items.map((item) => {
+const renderButtons = (items = []) => items.map((item) => {
     const variant = item.variant === 'secondary' ? 'secondary' : 'primary';
     return `<a class="btn btn-${variant}" href="${escapeHtml(item.href)}"${getLinkAttributes(item.href)}>${escapeHtml(item.label)}</a>`;
 }).join('');
 
-const renderHeroStats = (items) => items.map((item) => `
+const renderHeroStats = (items = []) => items.map((item) => `
     <div class="stat">
         <strong>${escapeHtml(item.title)}</strong>
         <span>${escapeHtml(item.text)}</span>
     </div>
 `).join('');
 
-const renderFeatures = (items) => items.map((item, index) => `
+const renderFeatures = (items = []) => items.map((item, index) => `
     <article class="feature-card ${delayClass(index)}">
         <div class="icon">${escapeHtml(item.icon)}</div>
         <h3>${escapeHtml(item.title)}</h3>
@@ -66,43 +71,67 @@ const renderFeatures = (items) => items.map((item, index) => `
     </article>
 `).join('');
 
-const renderProjectLinks = (links = []) => {
-    if (!Array.isArray(links) || !links.length) {
-        return '';
+const getPrimaryProjectLink = (item) => {
+    if (Array.isArray(item.links) && item.links.length && item.links[0].href) {
+        return item.links[0];
+    }
+
+    if (item.href) {
+        return { label: item.title || 'Ver proyecto', href: item.href };
+    }
+
+    return null;
+};
+
+const renderProjectArrow = (item) => {
+    const link = getPrimaryProjectLink(item);
+
+    if (!link) {
+        return '<span class="project-link project-link-disabled" aria-hidden="true">-&gt;</span>';
     }
 
     return `
-        <div class="project-actions">
-            ${links.map((link) => `
-                <a class="project-action" href="${escapeHtml(link.href)}"${getLinkAttributes(link.href)}>
-                    ${escapeHtml(link.label)}
-                </a>
-            `).join('')}
-        </div>
+        <a class="project-link" href="${escapeHtml(link.href)}"${getLinkAttributes(link.href)} aria-label="${escapeHtml(link.label || `Ver ${item.title}`)}">
+            -&gt;
+        </a>
     `;
 };
 
-const renderProjects = (items) => items.map((item, index) => `
-    <article class="project-card ${delayClass(index)}">
+const renderProjectCard = (item, index, duplicated = false) => `
+    <article class="project-card ${delayClass(index)}"${duplicated ? ' aria-hidden="true"' : ''}>
         <div class="project-cover"></div>
         <div class="project-body">
             <div class="project-top">
                 <span class="label">${escapeHtml(item.label)}</span>
-                <span class="project-link">-></span>
+                ${renderProjectArrow(item)}
             </div>
             <h3>${escapeHtml(item.title)}</h3>
             <p>${escapeHtml(item.description)}</p>
             <div class="tag-row">
-                ${item.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+                ${(item.tags || []).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
             </div>
-            ${renderProjectLinks(item.links)}
         </div>
     </article>
-`).join('');
+`;
 
-const renderSkills = (items) => items.map((item) => `<span class="skill-pill">${escapeHtml(item)}</span>`).join('');
+const renderProjects = (items = []) => {
+    const shouldLoop = items.length > 3;
+    const primaryCards = items.map((item, index) => renderProjectCard(item, index)).join('');
+    const duplicateCards = shouldLoop
+        ? items.map((item, index) => renderProjectCard(item, index, true)).join('')
+        : '';
 
-const renderExperience = (items) => items.map((item, index) => {
+    return `
+        <div class="projects-track${shouldLoop ? ' projects-track-loop' : ''}">
+            ${primaryCards}
+            ${duplicateCards}
+        </div>
+    `;
+};
+
+const renderSkills = (items = []) => items.map((item) => `<span class="skill-pill">${escapeHtml(item)}</span>`).join('');
+
+const renderExperience = (items = []) => items.map((item, index) => {
     const featuredClass = item.featured ? ' timeline-item-featured' : '';
     const place = [item.company, item.location, item.mode].filter(Boolean).join(' - ');
     const pills = item.pills && item.pills.length
@@ -116,20 +145,20 @@ const renderExperience = (items) => items.map((item, index) => {
             <div class="timeline-place">${escapeHtml(place)}</div>
             ${pills}
             <ul>
-                ${item.bullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join('')}
+                ${(item.bullets || []).map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join('')}
             </ul>
         </article>
     `;
 }).join('');
 
-const renderAboutCards = (items) => items.map((item, index) => `
+const renderAboutCards = (items = []) => items.map((item, index) => `
     <article class="about-card ${delayClass(index + 1)}">
         <h3>${escapeHtml(item.title)}</h3>
         <p>${escapeHtml(item.text)}</p>
     </article>
 `).join('');
 
-const renderEducation = (items) => items.map((item, index) => `
+const renderEducation = (items = []) => items.map((item, index) => `
     <article class="education-card ${delayClass(index)}">
         <div class="small-label">${escapeHtml(item.period)}</div>
         <h3>${escapeHtml(item.title)}</h3>
@@ -152,33 +181,136 @@ const renderCertificateMedia = (item) => {
     `;
 };
 
-const renderCertificates = (items) => items.map((item, index) => {
+const renderCertificates = (items = []) => items.map((item, index) => {
     const isClickable = Boolean(item.image && item.image.src);
     const alt = item.image && item.image.alt ? item.image.alt : item.title;
 
     return `
-    <article class="certificate-card ${isClickable ? 'certificate-card-clickable ' : ''}${delayClass(index)}"
-        ${isClickable ? `data-certificate-src="${escapeHtml(item.image.src)}" data-certificate-alt="${escapeHtml(alt)}" data-certificate-title="${escapeHtml(item.title)}" data-certificate-status="${escapeHtml(item.status)}" data-certificate-text="${escapeHtml(item.text)}" tabindex="0" role="button" aria-label="Abrir ${escapeHtml(item.title)}"` : ''}>
-        ${renderCertificateMedia(item)}
-        <div class="certificate-copy">
-            <div class="certificate-status">${escapeHtml(item.status)}</div>
-            <h3>${escapeHtml(item.title)}</h3>
-            <p>${escapeHtml(item.text)}</p>
-            ${isClickable ? '<span class="certificate-hint">Pulsa para ampliar</span>' : ''}
-        </div>
-    </article>
-`;
+        <article class="certificate-card ${isClickable ? 'certificate-card-clickable ' : ''}${delayClass(index)}"
+            ${isClickable ? `data-certificate-src="${escapeHtml(item.image.src)}" data-certificate-alt="${escapeHtml(alt)}" data-certificate-title="${escapeHtml(item.title)}" data-certificate-status="${escapeHtml(item.status)}" data-certificate-text="${escapeHtml(item.text)}" tabindex="0" role="button" aria-label="Abrir ${escapeHtml(item.title)}"` : ''}>
+            ${renderCertificateMedia(item)}
+            <div class="certificate-copy">
+                <div class="certificate-status">${escapeHtml(item.status)}</div>
+                <h3>${escapeHtml(item.title)}</h3>
+                <p>${escapeHtml(item.text)}</p>
+                ${isClickable ? '<span class="certificate-hint">Pulsa para ampliar</span>' : ''}
+            </div>
+        </article>
+    `;
 }).join('');
 
-const renderDetails = (items) => items.map((item) => `
+const renderDetails = (items = []) => items.map((item) => `
     <a class="contact-pill" href="${escapeHtml(item.href)}"${getLinkAttributes(item.href)}>${escapeHtml(item.text)}</a>
 `).join('');
 
-const renderSocials = (items) => items.map((item) => `
+const renderSocials = (items = []) => items.map((item) => `
     <a class="social" href="${escapeHtml(item.href)}" aria-label="${escapeHtml(item.label)}"${getLinkAttributes(item.href)}>${escapeHtml(item.short || item.label)}</a>
 `).join('');
 
-const renderNavigation = (items) => {
+const ensureProjectCarouselStyles = () => {
+    if (document.getElementById('projectCarouselStyles')) {
+        return;
+    }
+
+    const style = document.createElement('style');
+    style.id = 'projectCarouselStyles';
+    style.textContent = `
+        .projects-grid {
+            display: block !important;
+            overflow: hidden;
+            position: relative;
+            margin-inline: -8px;
+            padding: 8px;
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+        }
+
+        .projects-track {
+            display: flex;
+            align-items: stretch;
+            gap: 18px;
+            width: max-content;
+        }
+
+        .projects-track-loop {
+            animation: projectMarquee 54s linear infinite;
+        }
+
+        .projects-grid:hover .projects-track-loop {
+            animation-play-state: paused;
+        }
+
+        .projects-track .project-card {
+            flex: 0 0 clamp(285px, 31vw, 390px);
+            min-width: 0;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 38px;
+            min-height: 38px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.07);
+            color: rgba(255, 255, 255, 0.86);
+            font-weight: 800;
+            transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+        }
+
+        .project-link:hover {
+            transform: translateX(4px);
+            background: rgba(255, 255, 255, 0.13);
+            border-color: rgba(255, 255, 255, 0.22);
+            color: #fff;
+        }
+
+        .project-link-disabled {
+            opacity: 0.38;
+        }
+
+        .project-link-disabled:hover {
+            transform: none;
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--line);
+        }
+
+        @keyframes projectMarquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(calc(-50% - 9px)); }
+        }
+
+        @media (max-width: 760px) {
+            .projects-grid {
+                overflow-x: auto;
+                -webkit-mask-image: none;
+                mask-image: none;
+                scroll-snap-type: x mandatory;
+            }
+
+            .projects-track,
+            .projects-track-loop {
+                animation: none;
+            }
+
+            .projects-track .project-card {
+                flex-basis: min(86vw, 360px);
+                scroll-snap-align: start;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .projects-track-loop {
+                animation: none;
+            }
+        }
+    `;
+
+    document.head.appendChild(style);
+};
+
+const renderNavigation = (items = []) => {
     const sectionOrder = Array.isArray(content.sectionOrder) ? content.sectionOrder : [];
     const orderedItems = [...items].sort((left, right) => {
         const leftKey = navigationSectionKeyMap[left.href];
@@ -196,7 +328,7 @@ const renderNavigation = (items) => {
 
 const renderHeader = (headerCta) => {
     const button = document.getElementById('headerCta');
-    if (!button) {
+    if (!button || !headerCta) {
         return;
     }
 
@@ -215,7 +347,7 @@ const renderHero = (hero) => {
     setHTML('.stats', renderHeroStats(hero.stats));
 
     const photo = document.querySelector('.profile-photo');
-    if (photo) {
+    if (photo && hero.photo) {
         photo.src = hero.photo.src;
         photo.alt = hero.photo.alt;
     }
@@ -232,6 +364,7 @@ const renderPortfolioContent = () => {
         return;
     }
 
+    ensureProjectCarouselStyles();
     renderNavigation(content.navigation);
     renderHeader(content.headerCta);
     renderHero(content.hero);
