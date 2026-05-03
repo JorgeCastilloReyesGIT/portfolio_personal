@@ -1,16 +1,59 @@
-# Portfolio personal
+# Jorge Castillo — Portfolio personal
 
-Este proyecto es una web estatica, asi que puedes publicarla en un VPS Linux sin backend ni base de datos. La opcion mas simple y estable es servirla con `nginx`.
+Portfolio profesional de Jorge Castillo, desarrollador junior backend enfocado en Python, Java/Spring Boot, APIs REST, automatización con n8n, IA aplicada y despliegue en VPS.
+
+## Objetivo
+
+Este portfolio está pensado para procesos de selección de perfiles como:
+
+- Junior Backend Developer
+- Junior Python Developer
+- Junior Java / Spring Boot Developer
+- Software Developer Junior
+- Automation Developer Junior
+- Perfil técnico junior con backend, APIs, automatización y deploy
+
+La web muestra experiencia, proyectos, stack técnico, formación, certificados y vías de contacto en una página clara, visual y fácil de revisar por recruiters o equipos técnicos.
+
+## Secciones principales
+
+- Presentación profesional
+- Proyectos destacados
+- Skills técnicas
+- Experiencia profesional
+- Formación
+- Certificados
+- Contacto y enlaces externos
+
+## Stack
+
+- HTML
+- CSS
+- JavaScript
+- GitHub
+- VPS / Nginx
+- Docker / Linux
+
+## Proyectos destacados en la web
+
+- Calculadora de afinidad CV-oferta
+- Captación automatizada de contactos con n8n y webhooks
+- Despliegue de servicios en VPS
+- APIs REST con Java y Django
+
+## Despliegue recomendado: VPS Linux + nginx + HTTPS
+
+Este proyecto es una web estática, así que puedes publicarla en un VPS Linux sin backend ni base de datos. La opción más simple y estable es servirla con `nginx`.
 
 ## Estructura
 
-- `index.html`: pagina principal
+- `index.html`: página principal
 - `editor.html`: editor auxiliar
-- `assets/`: estilos, scripts e imagenes
-- `static/`: contenido estatico adicional
-- `deploy/nginx/portfolio.conf`: configuracion base de `nginx` para el VPS
+- `assets/`: estilos, scripts, documentos e imágenes
+- `static/`: contenido estático adicional
+- `deploy/nginx/portfolio.conf`: configuración base de `nginx` para el VPS
 
-## Opcion recomendada: VPS Linux + nginx + HTTPS
+## Publicación en VPS
 
 Estas instrucciones asumen un VPS con Ubuntu o Debian y un dominio apuntando a la IP del servidor.
 
@@ -18,14 +61,14 @@ Estas instrucciones asumen un VPS con Ubuntu o Debian y un dominio apuntando a l
 
 En tu proveedor DNS crea estos registros:
 
-- `A` para `@` apuntando a la IP publica de tu VPS
+- `A` para `@` apuntando a la IP pública de tu VPS
 - `A` para `www` apuntando a la misma IP
 
-Si aun no tienes dominio, puedes probar la web con la IP del VPS, pero no tendras HTTPS valido con Certbot hasta configurar el dominio.
+Si aún no tienes dominio, puedes probar la web con la IP del VPS, pero no tendrás HTTPS válido con Certbot hasta configurar el dominio.
 
 ### 2. Instala nginx en el VPS
 
-Conectate por SSH:
+Conéctate por SSH:
 
 ```bash
 ssh usuario@IP_DEL_VPS
@@ -45,27 +88,27 @@ sudo mkdir -p /var/www/portfolio
 sudo chown -R $USER:$USER /var/www/portfolio
 ```
 
-### 4. Sube tu portfolio desde tu PC
+### 4. Sube el portfolio desde tu PC
 
-Desde la carpeta local del proyecto, sube los archivos por `scp`:
+Desde la carpeta local del proyecto:
 
 ```bash
 scp -r index.html editor.html assets static usuario@IP_DEL_VPS:/var/www/portfolio/
 ```
 
-Si mas adelante cambias algo, repite ese comando para actualizar la web.
+Si más adelante cambias algo, repite ese comando para actualizar la web.
 
 ### 5. Configura nginx
 
-La plantilla [`deploy/nginx/portfolio.conf`](deploy/nginx/portfolio.conf) ya esta preparada para funcionar sin dominio de pago usando la IP del VPS, porque incluye `server_name _;`.
+La plantilla [`deploy/nginx/portfolio.conf`](deploy/nginx/portfolio.conf) está preparada para funcionar sin dominio de pago usando la IP del VPS, porque incluye `server_name _;`.
 
-Si en el futuro compras un dominio, podras cambiar esa linea por algo como:
+Si en el futuro compras un dominio, cambia esa línea por algo como:
 
 ```nginx
 server_name tu-dominio.com www.tu-dominio.com;
 ```
 
-Puedes copiarla asi:
+Puedes copiarla así:
 
 ```bash
 scp deploy/nginx/portfolio.conf usuario@IP_DEL_VPS:/tmp/portfolio.conf
@@ -83,19 +126,19 @@ sudo systemctl reload nginx
 
 ### 6. Activa HTTPS
 
-Este paso solo aplica si mas adelante decides usar un dominio. Cuando el dominio ya resuelva hacia tu VPS, ejecuta:
+Este paso solo aplica si usas un dominio. Cuando el dominio ya resuelva hacia tu VPS:
 
 ```bash
 sudo certbot --nginx -d TU_DOMINIO.com -d www.TU_DOMINIO.com
 ```
 
-Comprueba que la renovacion automatica esta activa:
+Comprueba la renovación automática:
 
 ```bash
 sudo systemctl status certbot.timer
 ```
 
-## Actualizar la web en el futuro
+## Actualizar la web
 
 Cada vez que cambies el portfolio:
 
@@ -103,9 +146,18 @@ Cada vez que cambies el portfolio:
 scp -r index.html editor.html assets static usuario@IP_DEL_VPS:/var/www/portfolio/
 ```
 
-No hace falta reiniciar `nginx` para cambios de HTML, CSS, JS o imagenes.
+No hace falta reiniciar `nginx` para cambios de HTML, CSS, JS, documentos o imágenes.
 
-## Comprobaciones utiles en el VPS
+## Limpiar caché local del portfolio
+
+Si el navegador muestra contenido antiguo por `localStorage`, abre DevTools > Console y ejecuta:
+
+```js
+localStorage.removeItem('portfolioContentOverride');
+location.href = location.pathname + '?v=' + Date.now();
+```
+
+## Comprobaciones útiles en el VPS
 
 ```bash
 sudo nginx -t
@@ -116,4 +168,4 @@ curl -I http://TU_DOMINIO.com
 
 ## Despliegue alternativo
 
-Si prefieres montarlo con Docker, Portainer o Coolify, la web tambien es compatible porque solo necesita servir archivos estaticos. Aun asi, para una pagina personal en VPS, `nginx` directo suele ser la opcion mas simple.
+La web también puede servirse con Docker, Portainer, Coolify o GitHub Pages porque solo necesita servir archivos estáticos. Para una página personal en VPS, `nginx` directo suele ser la opción más simple.
