@@ -221,8 +221,20 @@ const ensureProjectCarouselStyles = () => {
             position: relative;
             margin-inline: -8px;
             padding: 8px;
+            cursor: grab;
+            user-select: none;
+            touch-action: pan-y;
             -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
             mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+        }
+
+        .projects-grid.is-dragging {
+            cursor: grabbing;
+        }
+
+        .projects-grid.is-dragging .project-card,
+        .projects-grid.is-dragging .project-link {
+            pointer-events: none;
         }
 
         .projects-track {
@@ -230,14 +242,15 @@ const ensureProjectCarouselStyles = () => {
             align-items: stretch;
             gap: 18px;
             width: max-content;
+            will-change: transform;
         }
 
         .projects-track-loop {
-            animation: projectMarquee 54s linear infinite;
+            animation: projectMarquee 58s linear infinite;
         }
 
-        .projects-grid:hover .projects-track-loop {
-            animation-play-state: paused;
+        .projects-track-loop.is-manual {
+            animation: none;
         }
 
         .projects-track .project-card {
@@ -284,6 +297,8 @@ const ensureProjectCarouselStyles = () => {
         @media (max-width: 760px) {
             .projects-grid {
                 overflow-x: auto;
+                cursor: auto;
+                user-select: auto;
                 -webkit-mask-image: none;
                 mask-image: none;
                 scroll-snap-type: x mandatory;
@@ -308,6 +323,113 @@ const ensureProjectCarouselStyles = () => {
     `;
 
     document.head.appendChild(style);
+};
+
+const initProjectCarouselDrag = () => {
+    const viewport = document.querySelector('.projects-grid');
+    const track = document.querySelector('.projects-track-loop');
+
+    if (!viewport || !track || viewport.dataset.dragReady === 'true') {
+        return;
+    }
+
+    viewport.dataset.dragReady = 'true';
+
+    let isDragging = false;
+    let startX = 0;
+    let dragStartOffset = 0;
+    let currentOffset = 0;
+    let dragDistance = 0;
+    let resumeTimer = 0;
+
+    const getLoopWidth = () => Math.max(1, track.scrollWidth / 2);
+
+    const normalizeOffset = (value) => {
+        const width = getLoopWidth();
+        let normalized = value % width;
+
+        if (normalized > 0) {
+            normalized -= width;
+        }
+
+        return normalized;
+    };
+
+    const applyOffset = (value) => {
+        currentOffset = normalizeOffset(value);
+        track.style.transform = `translateX(${currentOffset}px)`;
+    };
+
+    const pauseLoop = () => {
+        window.clearTimeout(resumeTimer);
+        const transform = window.getComputedStyle(track).transform;
+
+        if (transform && transform !== 'none') {
+            const matrix = new DOMMatrixReadOnly(transform);
+            currentOffset = matrix.m41;
+        }
+
+        track.classList.add('is-manual');
+        applyOffset(currentOffset);
+    };
+
+    const resumeLoop = () => {
+        window.clearTimeout(resumeTimer);
+        resumeTimer = window.setTimeout(() => {
+            track.style.transform = '';
+            track.classList.remove('is-manual');
+        }, 900);
+    };
+
+    viewport.addEventListener('pointerdown', (event) => {
+        if (event.button !== undefined && event.button !== 0) {
+            return;
+        }
+
+        pauseLoop();
+        isDragging = true;
+        startX = event.clientX;
+        dragStartOffset = currentOffset;
+        dragDistance = 0;
+        viewport.classList.add('is-dragging');
+        viewport.setPointerCapture(event.pointerId);
+    });
+
+    viewport.addEventListener('pointermove', (event) => {
+        if (!isDragging) {
+            return;
+        }
+
+        const delta = event.clientX - startX;
+        dragDistance = Math.max(dragDistance, Math.abs(delta));
+        applyOffset(dragStartOffset + delta);
+    });
+
+    const stopDragging = (event) => {
+        if (!isDragging) {
+            return;
+        }
+
+        isDragging = false;
+        viewport.classList.remove('is-dragging');
+
+        if (event && viewport.hasPointerCapture(event.pointerId)) {
+            viewport.releasePointerCapture(event.pointerId);
+        }
+
+        resumeLoop();
+    };
+
+    viewport.addEventListener('pointerup', stopDragging);
+    viewport.addEventListener('pointercancel', stopDragging);
+    viewport.addEventListener('pointerleave', stopDragging);
+
+    viewport.addEventListener('click', (event) => {
+        if (dragDistance > 8) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    }, true);
 };
 
 const renderNavigation = (items = []) => {
@@ -373,6 +495,7 @@ const renderPortfolioContent = () => {
 
     renderSectionHead('#proyectos', content.projects);
     setHTML('.projects-grid', renderProjects(content.projects.items));
+    initProjectCarouselDrag();
 
     renderSectionHead('#skills', content.skills);
     setHTML('.skills-cloud', renderSkills(content.skills.items));
