@@ -66,6 +66,22 @@ const renderFeatures = (items) => items.map((item, index) => `
     </article>
 `).join('');
 
+const renderProjectLinks = (links = []) => {
+    if (!Array.isArray(links) || !links.length) {
+        return '';
+    }
+
+    return `
+        <div class="project-actions">
+            ${links.map((link) => `
+                <a class="project-action" href="${escapeHtml(link.href)}"${getLinkAttributes(link.href)}>
+                    ${escapeHtml(link.label)}
+                </a>
+            `).join('')}
+        </div>
+    `;
+};
+
 const renderProjects = (items) => items.map((item, index) => `
     <article class="project-card ${delayClass(index)}">
         <div class="project-cover"></div>
@@ -79,6 +95,7 @@ const renderProjects = (items) => items.map((item, index) => `
             <div class="tag-row">
                 ${item.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
             </div>
+            ${renderProjectLinks(item.links)}
         </div>
     </article>
 `).join('');

@@ -29,14 +29,15 @@ window.defaultPortfolioContent = {
     hero: {
         titleFirst: 'Jorge',
         titleLast: 'Castillo',
-        description: 'Desarrollador de software enfocado en backend, automatización y despliegue. Trabajo con Java, Spring Boot, Python, Django y SQL para construir APIs, herramientas internas e integraciones reales. También uso n8n, Docker, Portainer, Coolify y VPS para llevar proyectos desde la idea hasta producción.',
+        description: 'Desarrollador junior enfocado en backend, automatización e IA aplicada. Trabajo con Java, Spring Boot, Python, Django y SQL para construir APIs, herramientas internas e integraciones reales. También uso n8n, OpenAI API, Docker, Nginx y VPS para crear soluciones útiles desde la idea hasta producción.',
         photo: {
             src: 'assets/img/selfie.jpg',
             alt: 'Retrato profesional de Jorge Castillo'
         },
         actions: [
             { label: 'Ver proyectos →', href: '#proyectos', variant: 'primary' },
-            { label: 'Contactar', href: '#contacto', variant: 'secondary' }
+            { label: 'Descargar CV', href: 'assets/docs/cv-jorge-castillo.pdf', variant: 'secondary' }
+
         ],
         stats: [
             {
@@ -44,8 +45,8 @@ window.defaultPortfolioContent = {
                 text: 'Java, Spring Boot, Python, Django y SQL'
             },
             {
-                title: 'Automatización',
-                text: 'n8n, APIs, webhooks e integraciones'
+                title: 'Automatización + IA',
+                text: 'n8n, OpenAI API, webhooks e integraciones'
             },
             {
                 title: 'Deploy',
@@ -81,7 +82,10 @@ window.defaultPortfolioContent = {
                 label: 'IA · Automatización',
                 title: 'Calculadora de afinidad CV-oferta',
                 description: 'Aplicación pensada para analizar una oferta de empleo, compararla con un CV y generar una puntuación de afinidad usando IA, APIs y lógica de negocio.',
-                tags: ['IA', 'APIs', 'Python', 'Automatización']
+                tags: ['IA', 'APIs', 'Python', 'Automatización'],
+                links: [
+                    { label: 'Ver código', href: 'https://github.com/JorgeCastilloReyesGIT/calculadora_de_afinidad' }
+                ]
             },
             {
                 label: 'Web · n8n · Leads',
@@ -115,7 +119,6 @@ window.defaultPortfolioContent = {
             'API Integration',
             'Webhooks',
             'JSON',
-            'OAuth2',
 
             'PostgreSQL',
             'MySQL',
@@ -125,41 +128,25 @@ window.defaultPortfolioContent = {
             'n8n',
             'Automation Workflows',
             'OpenAI API',
-            'LLM Integration',
-            'Prompt Engineering',
             'AI Automation',
-            'n8n AI Workflows',
-            'AI Assistants',
-            'Chatbot Development',
-            'Webhooks + AI',
-            'API-based AI Tools',
-            'Document AI',
-            'RAG Basics',
-            'Semantic Search Basics',
-            'AI Agents Basics',
-            'Multi-agent Workflows',
 
             'Docker',
             'Portainer',
             'Coolify',
             'VPS',
             'Linux',
-            'Ubuntu Server',
             'Nginx',
             'SSH',
             'HTTPS',
 
             'Git',
             'GitHub',
-            'GitHub Actions',
-            'CI/CD',
 
             'HTML',
             'CSS',
             'JavaScript',
             'Bootstrap',
-            'Testing',
-            'System Design'
+            'Testing básico'
         ]
     },
 
@@ -169,41 +156,31 @@ window.defaultPortfolioContent = {
         copy: 'Mi recorrido mezcla desarrollo, operaciones y soporte. Eso me ayuda a entender mejor el producto, la entrega y el contexto real del negocio.',
         items: [
             {
-                featured: true,
-                period: 'Noviembre 2025 - Hoy',
-                role: 'Programador Junior Python',
-                company: 'Halltic Tech S.L.',
-                location: 'Madrid',
-                mode: 'Híbrido',
-                pills: ['Contrato de prácticas', 'Programador'],
-                bullets: [
-                    'Desarrollo y apoyo técnico en soluciones basadas en Python para necesidades reales de empresa.',
-                    'Trabajo con Git, JSON y tareas de programación orientadas a necesidades reales de empresa.',
-                    'Experiencia en entorno híbrido, aprendizaje rápido y colaboración profesional con equipo y cliente.'
-                ]
+                status: 'Certificado',
+                title: 'Python',
+                image: {
+                    src: '',
+                    alt: 'Certificado Python Santander Open Academy'
+                },
+                text: 'Santander Open Academy · Formación en fundamentos de Python y programación.'
             },
             {
-                period: '2025',
-                role: 'Desarrollador de Software Full Stack',
-                company: 'UTAI SOFTWARE',
-                pills: ['Programador full stack'],
-                bullets: [
-                    'Creación de interfaces web con HTML, CSS, JavaScript y Bootstrap.',
-                    'Desarrollo de APIs REST con Java y Spring Boot.',
-                    'Gestión de base de datos con JPA/Hibernate y PostgreSQL.',
-                    'Desarrollo de APIs REST con Django y Django REST Framework.',
-                    'Integración de funcionalidades de IA mediante la API de OpenAI.'
-                ]
+                status: 'Certificado',
+                title: 'IA aplicada al entorno de trabajo',
+                image: {
+                    src: '',
+                    alt: 'Certificado IA aplicada al entorno de trabajo'
+                },
+                text: 'thePower · Formación práctica en uso de inteligencia artificial aplicada a productividad y entorno profesional.'
             },
             {
-                period: '2023',
-                role: 'Técnico Operaciones N1',
-                company: 'WESTCON COMSTOR',
-                bullets: [
-                    'Resolución de alertas y tickets.',
-                    'Contacto con herramientas y entornos de seguridad como Fortigate y Palo Alto.',
-                    'Experiencia práctica en soporte, seguimiento y respuesta operativa.'
-                ]
+                status: 'En progreso',
+                title: 'Backend, Docker y automatización',
+                image: {
+                    src: '',
+                    alt: 'Formación en backend, Docker y automatización'
+                },
+                text: 'Ampliando formación en APIs, despliegue, servidores Linux, Docker, n8n e integración de herramientas con IA.'
             }
         ]
     },
