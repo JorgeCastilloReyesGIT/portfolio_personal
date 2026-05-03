@@ -37,7 +37,6 @@ window.defaultPortfolioContent = {
         actions: [
             { label: 'Ver proyectos →', href: '#proyectos', variant: 'primary' },
             { label: 'Descargar CV', href: 'assets/docs/cv-jorge-castillo.pdf', variant: 'secondary' }
-
         ],
         stats: [
             {
@@ -91,7 +90,10 @@ window.defaultPortfolioContent = {
                 label: 'Web · n8n · Leads',
                 title: 'Web profesional con captación automatizada',
                 description: 'Página web conectada a n8n mediante webhooks para recibir formularios, enviar avisos internos y automatizar respuestas profesionales por email.',
-                tags: ['HTML', 'CSS', 'JavaScript', 'n8n', 'Webhooks']
+                tags: ['HTML', 'CSS', 'JavaScript', 'n8n', 'Webhooks'],
+                links: [
+                    { label: 'Ver portfolio', href: 'https://github.com/JorgeCastilloReyesGIT/portfolio_personal' }
+                ]
             },
             {
                 label: 'Deploy · Infraestructura',
@@ -153,34 +155,48 @@ window.defaultPortfolioContent = {
     experience: {
         eyebrow: 'Experiencia',
         title: 'Experiencia profesional',
-        copy: 'Mi recorrido mezcla desarrollo, operaciones y soporte. Eso me ayuda a entender mejor el producto, la entrega y el contexto real del negocio.',
+        copy: 'Mi recorrido combina desarrollo, automatización, backend y soporte técnico. Eso me ayuda a entender mejor el producto, la entrega y el contexto real del negocio.',
         items: [
             {
-                status: 'Certificado',
-                title: 'Python',
-                image: {
-                    src: '',
-                    alt: 'Certificado Python Santander Open Academy'
-                },
-                text: 'Santander Open Academy · Formación en fundamentos de Python y programación.'
+                featured: true,
+                period: 'Noviembre 2025 - Hoy',
+                role: 'Programador Junior Python',
+                company: 'Halltic Tech S.L.',
+                location: 'Madrid',
+                mode: 'Híbrido',
+                pills: ['Contrato de prácticas', 'Backend', 'Python'],
+                bullets: [
+                    'Desarrollo backend en Python para aplicaciones empresariales y herramientas internas.',
+                    'Creación y adaptación de vistas, reportes e interfaces con XML, JavaScript, HTML y CSS.',
+                    'Modelado y gestión de datos mediante ORM y PostgreSQL.',
+                    'Configuración de roles, permisos, reglas de acceso y procesos automatizados.',
+                    'Trabajo con Git, JSON y tareas de programación orientadas a necesidades reales de empresa.',
+                    'Refactorización, migración de código y adaptación de módulos a nuevas versiones.'
+                ]
             },
             {
-                status: 'Certificado',
-                title: 'IA aplicada al entorno de trabajo',
-                image: {
-                    src: '',
-                    alt: 'Certificado IA aplicada al entorno de trabajo'
-                },
-                text: 'thePower · Formación práctica en uso de inteligencia artificial aplicada a productividad y entorno profesional.'
+                period: '2025',
+                role: 'Desarrollador de Software Full Stack',
+                company: 'UTAI SOFTWARE',
+                pills: ['APIs', 'Backend', 'IA aplicada'],
+                bullets: [
+                    'Creación de interfaces web con HTML, CSS, JavaScript y Bootstrap.',
+                    'Desarrollo de APIs REST con Java y Spring Boot.',
+                    'Gestión de base de datos con JPA/Hibernate y PostgreSQL.',
+                    'Desarrollo de APIs REST con Django y Django REST Framework.',
+                    'Integración de funcionalidades de IA mediante la API de OpenAI.'
+                ]
             },
             {
-                status: 'En progreso',
-                title: 'Backend, Docker y automatización',
-                image: {
-                    src: '',
-                    alt: 'Formación en backend, Docker y automatización'
-                },
-                text: 'Ampliando formación en APIs, despliegue, servidores Linux, Docker, n8n e integración de herramientas con IA.'
+                period: '2023',
+                role: 'Técnico Operaciones N1',
+                company: 'WESTCON COMSTOR',
+                pills: ['Soporte', 'Operaciones', 'Seguridad'],
+                bullets: [
+                    'Resolución de alertas y tickets técnicos.',
+                    'Contacto con herramientas y entornos de seguridad como Fortigate y Palo Alto.',
+                    'Experiencia práctica en soporte, seguimiento y respuesta operativa.'
+                ]
             }
         ]
     },
@@ -238,35 +254,35 @@ window.defaultPortfolioContent = {
     certificates: {
         eyebrow: 'Certificados',
         title: 'Formación complementaria',
-        copy: 'Sección preparada para mostrar certificados, diplomas y formación técnica verificable relacionada con backend, despliegue, automatización e IA aplicada.',
+        copy: 'Certificados y formación complementaria relacionada con backend, automatización, programación e IA aplicada.',
         windowLabel: 'certificados.dev',
         items: [
             {
+                status: 'Certificado',
+                title: 'Python',
+                image: {
+                    src: '',
+                    alt: 'Certificado Python Santander Open Academy'
+                },
+                text: 'Santander Open Academy · Formación en fundamentos de Python y programación.'
+            },
+            {
+                status: 'Certificado',
+                title: 'IA aplicada al entorno de trabajo',
+                image: {
+                    src: '',
+                    alt: 'Certificado IA aplicada al entorno de trabajo'
+                },
+                text: 'thePower · Formación práctica en uso de inteligencia artificial aplicada a productividad y entorno profesional.'
+            },
+            {
                 status: 'En progreso',
-                title: 'Backend, cloud y automatización',
+                title: 'Backend, Docker y automatización',
                 image: {
                     src: '',
-                    alt: 'Formación en backend, cloud y automatización'
+                    alt: 'Formación en backend, Docker y automatización'
                 },
-                text: 'Actualmente estoy ampliando mi formación en APIs, despliegue, servidores Linux, automatización e integración de herramientas con IA.'
-            },
-            {
-                status: 'Práctico',
-                title: 'Proyectos propios',
-                image: {
-                    src: '',
-                    alt: 'Proyectos propios de desarrollo y automatización'
-                },
-                text: 'Portfolio, automatizaciones con n8n, despliegues en VPS y pruebas reales con APIs, webhooks y flujos de IA aplicados a casos concretos.'
-            },
-            {
-                status: 'Objetivo',
-                title: 'Certificaciones técnicas',
-                image: {
-                    src: '',
-                    alt: 'Certificaciones técnicas futuras'
-                },
-                text: 'Esta sección está lista para añadir certificados verificables de backend, Docker, cloud, bases de datos, automatización o desarrollo profesional.'
+                text: 'Ampliando formación en APIs, despliegue, servidores Linux, Docker, n8n e integración de herramientas con IA.'
             }
         ]
     },
@@ -274,7 +290,7 @@ window.defaultPortfolioContent = {
     contact: {
         eyebrow: 'Contacto',
         title: 'Busco mi siguiente oportunidad',
-        copy: 'Si buscas un perfil junior con buena base tecnica, capacidad de adaptacion y ganas reales de aportar en backend, automatizacion o despliegue, estare encantado de hablar contigo.',
+        copy: 'Si buscas un perfil junior con buena base técnica, capacidad de adaptación y ganas reales de aportar en backend, automatización o despliegue, estaré encantado de hablar contigo.',
         details: [
             {
                 text: 'jorge.a.castilloreyes@gmail.com',
