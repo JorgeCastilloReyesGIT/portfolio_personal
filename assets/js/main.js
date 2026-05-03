@@ -246,10 +246,6 @@ const ensureProjectCarouselStyles = () => {
         }
 
         .projects-track-loop {
-            animation: projectMarquee 58s linear infinite;
-        }
-
-        .projects-track-loop.is-manual {
             animation: none;
         }
 
@@ -289,11 +285,6 @@ const ensureProjectCarouselStyles = () => {
             border-color: var(--line);
         }
 
-        @keyframes projectMarquee {
-            from { transform: translateX(0); }
-            to { transform: translateX(calc(-50% - 9px)); }
-        }
-
         @media (max-width: 760px) {
             .projects-grid {
                 overflow-x: auto;
@@ -304,20 +295,9 @@ const ensureProjectCarouselStyles = () => {
                 scroll-snap-type: x mandatory;
             }
 
-            .projects-track,
-            .projects-track-loop {
-                animation: none;
-            }
-
             .projects-track .project-card {
                 flex-basis: min(86vw, 360px);
                 scroll-snap-align: start;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .projects-track-loop {
-                animation: none;
             }
         }
     `;
@@ -333,6 +313,13 @@ const initProjectCarouselDrag = () => {
         return;
     }
 
+    const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const allowMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+
+    if (!hasFinePointer || !allowMotion) {
+        return;
+    }
+
     viewport.dataset.dragReady = 'true';
 
     let isDragging = false;
@@ -340,7 +327,9 @@ const initProjectCarouselDrag = () => {
     let dragStartOffset = 0;
     let currentOffset = 0;
     let dragDistance = 0;
-    let resumeTimer = 0;
+    let resumeAt = 0;
+    let lastFrameTime = 0;
+    const speed = 22; // px/segundo: lento y constante.
 
     const getLoopWidth = () => Math.max(1, track.scrollWidth / 2);
 
@@ -360,25 +349,19 @@ const initProjectCarouselDrag = () => {
         track.style.transform = `translateX(${currentOffset}px)`;
     };
 
-    const pauseLoop = () => {
-        window.clearTimeout(resumeTimer);
-        const transform = window.getComputedStyle(track).transform;
-
-        if (transform && transform !== 'none') {
-            const matrix = new DOMMatrixReadOnly(transform);
-            currentOffset = matrix.m41;
+    const tick = (timestamp) => {
+        if (!lastFrameTime) {
+            lastFrameTime = timestamp;
         }
 
-        track.classList.add('is-manual');
-        applyOffset(currentOffset);
-    };
+        const delta = Math.min(80, timestamp - lastFrameTime);
+        lastFrameTime = timestamp;
 
-    const resumeLoop = () => {
-        window.clearTimeout(resumeTimer);
-        resumeTimer = window.setTimeout(() => {
-            track.style.transform = '';
-            track.classList.remove('is-manual');
-        }, 900);
+        if (!isDragging && timestamp >= resumeAt) {
+            applyOffset(currentOffset - (speed * delta / 1000));
+        }
+
+        window.requestAnimationFrame(tick);
     };
 
     viewport.addEventListener('pointerdown', (event) => {
@@ -386,11 +369,11 @@ const initProjectCarouselDrag = () => {
             return;
         }
 
-        pauseLoop();
         isDragging = true;
         startX = event.clientX;
         dragStartOffset = currentOffset;
         dragDistance = 0;
+        resumeAt = Number.POSITIVE_INFINITY;
         viewport.classList.add('is-dragging');
         viewport.setPointerCapture(event.pointerId);
     });
@@ -417,7 +400,8 @@ const initProjectCarouselDrag = () => {
             viewport.releasePointerCapture(event.pointerId);
         }
 
-        resumeLoop();
+        resumeAt = performance.now() + 700;
+        lastFrameTime = 0;
     };
 
     viewport.addEventListener('pointerup', stopDragging);
@@ -430,6 +414,12 @@ const initProjectCarouselDrag = () => {
             event.stopPropagation();
         }
     }, true);
+
+    window.addEventListener('resize', () => {
+        applyOffset(currentOffset);
+    }, { passive: true });
+
+    window.requestAnimationFrame(tick);
 };
 
 const renderNavigation = (items = []) => {
