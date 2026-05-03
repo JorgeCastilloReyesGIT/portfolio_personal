@@ -34,16 +34,12 @@ const getLinkAttributes = (href) => isExternalHttpLink(href) ? ' target="_blank"
 
 const setText = (selector, value) => {
     const element = document.querySelector(selector);
-    if (element) {
-        element.textContent = value;
-    }
+    if (element) element.textContent = value;
 };
 
 const setHTML = (selector, html) => {
     const element = document.querySelector(selector);
-    if (element) {
-        element.innerHTML = html;
-    }
+    if (element) element.innerHTML = html;
 };
 
 const delayClass = (index) => {
@@ -72,23 +68,14 @@ const renderFeatures = (items = []) => items.map((item, index) => `
 `).join('');
 
 const getPrimaryProjectLink = (item) => {
-    if (Array.isArray(item.links) && item.links.length && item.links[0].href) {
-        return item.links[0];
-    }
-
-    if (item.href) {
-        return { label: item.title || 'Ver proyecto', href: item.href };
-    }
-
+    if (Array.isArray(item.links) && item.links.length && item.links[0].href) return item.links[0];
+    if (item.href) return { label: item.title || 'Ver proyecto', href: item.href };
     return null;
 };
 
 const renderProjectArrow = (item) => {
     const link = getPrimaryProjectLink(item);
-
-    if (!link) {
-        return '<span class="project-link project-link-disabled" aria-hidden="true">-&gt;</span>';
-    }
+    if (!link) return '<span class="project-link project-link-disabled" aria-hidden="true">-&gt;</span>';
 
     return `
         <a class="project-link" href="${escapeHtml(link.href)}"${getLinkAttributes(link.href)} aria-label="${escapeHtml(link.label || `Ver ${item.title}`)}">
@@ -117,9 +104,7 @@ const renderProjectCard = (item, index, duplicated = false) => `
 const renderProjects = (items = []) => {
     const shouldLoop = items.length > 3;
     const primaryCards = items.map((item, index) => renderProjectCard(item, index)).join('');
-    const duplicateCards = shouldLoop
-        ? items.map((item, index) => renderProjectCard(item, index, true)).join('')
-        : '';
+    const duplicateCards = shouldLoop ? items.map((item, index) => renderProjectCard(item, index, true)).join('') : '';
 
     return `
         <div class="projects-track${shouldLoop ? ' projects-track-loop' : ''}">
@@ -168,10 +153,7 @@ const renderEducation = (items = []) => items.map((item, index) => `
 `).join('');
 
 const renderCertificateMedia = (item) => {
-    if (!item.image || !item.image.src) {
-        return '';
-    }
-
+    if (!item.image || !item.image.src) return '';
     const alt = item.image.alt || `Vista previa de ${item.title}`;
 
     return `
@@ -208,9 +190,7 @@ const renderSocials = (items = []) => items.map((item) => `
 `).join('');
 
 const ensureProjectCarouselStyles = () => {
-    if (document.getElementById('projectCarouselStyles')) {
-        return;
-    }
+    if (document.getElementById('projectCarouselStyles')) return;
 
     const style = document.createElement('style');
     style.id = 'projectCarouselStyles';
@@ -228,9 +208,8 @@ const ensureProjectCarouselStyles = () => {
             mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
         }
 
-        .projects-grid.is-dragging {
-            cursor: grabbing;
-        }
+        .projects-grid.is-paused { cursor: grab; }
+        .projects-grid.is-dragging { cursor: grabbing; }
 
         .projects-grid.is-dragging .project-card,
         .projects-grid.is-dragging .project-link {
@@ -245,9 +224,7 @@ const ensureProjectCarouselStyles = () => {
             will-change: transform;
         }
 
-        .projects-track-loop {
-            animation: none;
-        }
+        .projects-track-loop { animation: none; }
 
         .projects-track .project-card {
             flex: 0 0 clamp(285px, 31vw, 390px);
@@ -265,6 +242,8 @@ const ensureProjectCarouselStyles = () => {
             background: rgba(255, 255, 255, 0.07);
             color: rgba(255, 255, 255, 0.86);
             font-weight: 800;
+            position: relative;
+            z-index: 3;
             transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
         }
 
@@ -275,9 +254,7 @@ const ensureProjectCarouselStyles = () => {
             color: #fff;
         }
 
-        .project-link-disabled {
-            opacity: 0.38;
-        }
+        .project-link-disabled { opacity: 0.38; }
 
         .project-link-disabled:hover {
             transform: none;
@@ -299,6 +276,8 @@ const ensureProjectCarouselStyles = () => {
                 flex-basis: min(86vw, 360px);
                 scroll-snap-align: start;
             }
+
+            .projects-track .project-card[aria-hidden="true"] { display: none; }
         }
     `;
 
@@ -309,38 +288,30 @@ const initProjectCarouselDrag = () => {
     const viewport = document.querySelector('.projects-grid');
     const track = document.querySelector('.projects-track-loop');
 
-    if (!viewport || !track || viewport.dataset.dragReady === 'true') {
-        return;
-    }
+    if (!viewport || !track || viewport.dataset.dragReady === 'true') return;
 
     const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     const allowMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
-
-    if (!hasFinePointer || !allowMotion) {
-        return;
-    }
+    if (!hasFinePointer || !allowMotion) return;
 
     viewport.dataset.dragReady = 'true';
 
     let isDragging = false;
+    let isHovering = false;
     let startX = 0;
     let dragStartOffset = 0;
     let currentOffset = 0;
     let dragDistance = 0;
-    let resumeAt = 0;
+    let suppressClick = false;
     let lastFrameTime = 0;
-    const speed = 22; // px/segundo: lento y constante.
+    const speed = 22;
 
     const getLoopWidth = () => Math.max(1, track.scrollWidth / 2);
 
     const normalizeOffset = (value) => {
         const width = getLoopWidth();
         let normalized = value % width;
-
-        if (normalized > 0) {
-            normalized -= width;
-        }
-
+        if (normalized > 0) normalized -= width;
         return normalized;
     };
 
@@ -350,75 +321,86 @@ const initProjectCarouselDrag = () => {
     };
 
     const tick = (timestamp) => {
-        if (!lastFrameTime) {
-            lastFrameTime = timestamp;
-        }
-
+        if (!lastFrameTime) lastFrameTime = timestamp;
         const delta = Math.min(80, timestamp - lastFrameTime);
         lastFrameTime = timestamp;
 
-        if (!isDragging && timestamp >= resumeAt) {
+        if (!isDragging && !isHovering) {
             applyOffset(currentOffset - (speed * delta / 1000));
         }
 
         window.requestAnimationFrame(tick);
     };
 
+    viewport.addEventListener('pointerenter', () => {
+        isHovering = true;
+        viewport.classList.add('is-paused');
+    });
+
+    viewport.addEventListener('pointerleave', (event) => {
+        if (isDragging) {
+            stopDragging(event);
+        }
+
+        isHovering = false;
+        viewport.classList.remove('is-paused');
+        lastFrameTime = 0;
+    });
+
     viewport.addEventListener('pointerdown', (event) => {
-        if (event.button !== undefined && event.button !== 0) {
+        if (event.button !== undefined && event.button !== 0) return;
+
+        if (event.target.closest('a, button')) {
+            suppressClick = false;
             return;
         }
 
         isDragging = true;
+        isHovering = true;
         startX = event.clientX;
         dragStartOffset = currentOffset;
         dragDistance = 0;
-        resumeAt = Number.POSITIVE_INFINITY;
-        viewport.classList.add('is-dragging');
+        suppressClick = false;
+        viewport.classList.add('is-dragging', 'is-paused');
         viewport.setPointerCapture(event.pointerId);
     });
 
     viewport.addEventListener('pointermove', (event) => {
-        if (!isDragging) {
-            return;
-        }
+        if (!isDragging) return;
 
         const delta = event.clientX - startX;
         dragDistance = Math.max(dragDistance, Math.abs(delta));
         applyOffset(dragStartOffset + delta);
     });
 
-    const stopDragging = (event) => {
-        if (!isDragging) {
-            return;
-        }
+    function stopDragging(event) {
+        if (!isDragging) return;
 
         isDragging = false;
+        suppressClick = dragDistance > 8;
         viewport.classList.remove('is-dragging');
 
         if (event && viewport.hasPointerCapture(event.pointerId)) {
             viewport.releasePointerCapture(event.pointerId);
         }
 
-        resumeAt = performance.now() + 700;
+        isHovering = viewport.matches(':hover');
+        viewport.classList.toggle('is-paused', isHovering);
         lastFrameTime = 0;
-    };
+    }
 
     viewport.addEventListener('pointerup', stopDragging);
     viewport.addEventListener('pointercancel', stopDragging);
-    viewport.addEventListener('pointerleave', stopDragging);
 
     viewport.addEventListener('click', (event) => {
-        if (dragDistance > 8) {
+        if (suppressClick) {
             event.preventDefault();
             event.stopPropagation();
+            suppressClick = false;
         }
     }, true);
 
-    window.addEventListener('resize', () => {
-        applyOffset(currentOffset);
-    }, { passive: true });
-
+    window.addEventListener('resize', () => applyOffset(currentOffset), { passive: true });
     window.requestAnimationFrame(tick);
 };
 
@@ -431,7 +413,6 @@ const renderNavigation = (items = []) => {
         const rawRightIndex = rightKey ? sectionOrder.indexOf(rightKey) : -1;
         const leftIndex = rawLeftIndex === -1 ? Number.MAX_SAFE_INTEGER : rawLeftIndex;
         const rightIndex = rawRightIndex === -1 ? Number.MAX_SAFE_INTEGER : rawRightIndex;
-
         return leftIndex - rightIndex;
     });
 
@@ -440,10 +421,7 @@ const renderNavigation = (items = []) => {
 
 const renderHeader = (headerCta) => {
     const button = document.getElementById('headerCta');
-    if (!button || !headerCta) {
-        return;
-    }
-
+    if (!button || !headerCta) return;
     button.textContent = headerCta.label;
     button.href = headerCta.href;
 };
@@ -472,9 +450,7 @@ const renderSectionHead = (sectionSelector, sectionContent) => {
 };
 
 const renderPortfolioContent = () => {
-    if (!content) {
-        return;
-    }
+    if (!content) return;
 
     ensureProjectCarouselStyles();
     renderNavigation(content.navigation);
@@ -517,22 +493,15 @@ const renderPortfolioContent = () => {
 };
 
 const applySectionOrder = (order) => {
-    if (!Array.isArray(order)) {
-        return;
-    }
+    if (!Array.isArray(order)) return;
 
     const main = document.querySelector('main#inicio');
-    if (!main) {
-        return;
-    }
+    if (!main) return;
 
     order.forEach((sectionKey) => {
         const selector = sectionSelectorMap[sectionKey];
         const section = selector ? document.querySelector(selector) : null;
-
-        if (section) {
-            main.appendChild(section);
-        }
+        if (section) main.appendChild(section);
     });
 };
 
@@ -541,7 +510,6 @@ const createCertificateModal = () => {
     modal.className = 'certificate-modal';
     modal.id = 'certificateModal';
     modal.setAttribute('aria-hidden', 'true');
-
     modal.innerHTML = `
         <div class="certificate-modal-backdrop" data-close-modal="true"></div>
         <div class="certificate-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="certificateModalTitle">
@@ -556,7 +524,6 @@ const createCertificateModal = () => {
             </div>
         </div>
     `;
-
     document.body.appendChild(modal);
     return modal;
 };
@@ -568,9 +535,7 @@ const certificateModalTitle = document.getElementById('certificateModalTitle');
 const certificateModalText = document.getElementById('certificateModalText');
 
 const openCertificateModal = (card) => {
-    if (!card || !card.dataset.certificateSrc) {
-        return;
-    }
+    if (!card || !card.dataset.certificateSrc) return;
 
     certificateModalImage.src = card.dataset.certificateSrc;
     certificateModalImage.alt = card.dataset.certificateAlt || card.dataset.certificateTitle || 'Certificado';
@@ -634,10 +599,8 @@ if (cursorGlow && allowMotion && hasFinePointer) {
     const animateGlow = () => {
         glowX += (targetX - glowX) * 0.16;
         glowY += (targetY - glowY) * 0.16;
-
         cursorGlow.style.left = `${glowX}px`;
         cursorGlow.style.top = `${glowY}px`;
-
         const isSettled = Math.abs(targetX - glowX) < 0.2 && Math.abs(targetY - glowY) < 0.2;
         glowFrame = isSettled ? 0 : requestAnimationFrame(animateGlow);
     };
@@ -645,10 +608,7 @@ if (cursorGlow && allowMotion && hasFinePointer) {
     window.addEventListener('pointermove', (event) => {
         targetX = event.clientX;
         targetY = event.clientY;
-
-        if (!glowFrame) {
-            glowFrame = requestAnimationFrame(animateGlow);
-        }
+        if (!glowFrame) glowFrame = requestAnimationFrame(animateGlow);
     }, { passive: true });
 } else if (cursorGlow) {
     cursorGlow.style.display = 'none';
@@ -661,17 +621,13 @@ if (tiltCard && allowMotion && hasFinePointer && window.innerWidth > 760) {
     let rect = null;
 
     const applyTilt = () => {
-        if (!rect) {
-            rect = tiltCard.getBoundingClientRect();
-        }
-
+        if (!rect) rect = tiltCard.getBoundingClientRect();
         const x = pointerX - rect.left;
         const y = pointerY - rect.top;
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
         const rotateY = ((x - centerX) / centerX) * 4;
         const rotateX = ((centerY - y) / centerY) * 4;
-
         tiltCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-3px)`;
         cardFrame = 0;
     };
@@ -683,10 +639,7 @@ if (tiltCard && allowMotion && hasFinePointer && window.innerWidth > 760) {
     tiltCard.addEventListener('pointermove', (event) => {
         pointerX = event.clientX;
         pointerY = event.clientY;
-
-        if (!cardFrame) {
-            cardFrame = requestAnimationFrame(applyTilt);
-        }
+        if (!cardFrame) cardFrame = requestAnimationFrame(applyTilt);
     }, { passive: true });
 
     tiltCard.addEventListener('pointerleave', () => {
@@ -694,7 +647,6 @@ if (tiltCard && allowMotion && hasFinePointer && window.innerWidth > 760) {
             cancelAnimationFrame(cardFrame);
             cardFrame = 0;
         }
-
         tiltCard.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0)';
     });
 
