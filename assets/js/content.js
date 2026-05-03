@@ -87,6 +87,15 @@ window.defaultPortfolioContent = {
                 ]
             },
             {
+                label: 'Portfolio · Marca personal',
+                title: 'Portfolio personal para procesos de selección',
+                description: 'Portfolio profesional con contenido editable, secciones dinámicas, CV descargable y estructura pensada para mostrar experiencia, proyectos y stack técnico de forma clara para recruiters y equipos técnicos.',
+                tags: ['HTML', 'CSS', 'JavaScript', 'UX', 'GitHub'],
+                links: [
+                    { label: 'Ver código', href: 'https://github.com/JorgeCastilloReyesGIT/portfolio_personal' }
+                ]
+            },
+            {
                 label: 'Web · n8n · Leads',
                 title: 'Captación automatizada de contactos',
                 description: 'Web conectada a flujos de n8n mediante webhooks para recibir formularios, enviar avisos internos y preparar respuestas profesionales. Demuestra integración entre frontend, automatización y procesos comerciales.',
@@ -106,6 +115,18 @@ window.defaultPortfolioContent = {
                 title: 'APIs REST con Java y Django',
                 description: 'Desarrollo de servicios backend con estructura por capas, persistencia con ORM, conexión a PostgreSQL y endpoints REST pensados para aplicaciones web o móviles.',
                 tags: ['Java', 'Spring Boot', 'Django', 'REST APIs', 'PostgreSQL']
+            },
+            {
+                label: 'Automatización · n8n',
+                title: 'Flujos internos con webhooks y avisos',
+                description: 'Automatizaciones para conectar formularios, avisos internos, email y herramientas externas mediante webhooks, JSON y APIs. Enfoque práctico: reducir pasos manuales y acelerar la respuesta.',
+                tags: ['n8n', 'Webhooks', 'JSON', 'Email', 'APIs']
+            },
+            {
+                label: 'IA aplicada · Herramientas',
+                title: 'Integraciones con OpenAI API',
+                description: 'Pruebas y herramientas internas usando OpenAI API para generar respuestas, analizar texto y apoyar flujos de automatización. Uso de IA con foco en utilidad real, no como efecto visual.',
+                tags: ['OpenAI API', 'IA aplicada', 'Python', 'Automatización']
             }
         ]
     },
